@@ -8,6 +8,10 @@
 *
 * Author:
 *
+* All test files need to follow the naming scheme
+* 'test_module_name.c' where 'module_name.c' is the name
+* of the corresponding c file being tested in src. 
+*
 **********************************************************/
 
 // #include "minunit.h"

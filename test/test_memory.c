@@ -30,7 +30,7 @@ static char *test_my_reverse() {
     return 0;
 }
 
-static char *all_tests_data() {
+char *all_tests_memory() {
     mu_run_test(test_my_memmove);
     mu_run_test(test_my_memzero);
     mu_run_test(test_my_reverse);

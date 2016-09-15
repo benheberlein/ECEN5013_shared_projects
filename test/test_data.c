@@ -38,7 +38,7 @@ static char *test_little_to_big() {
     return 0;
 }
 
-static char *all_tests_data() {
+char *all_tests_data() {
     mu_run_test(test_my_itoa);
     mu_run_test(test_my_atoi);
     mu_run_test(test_dump_memory);

@@ -11,6 +11,12 @@
 *
 ***********************************************************/
 
+#include <stdio.h>
+#include "minunit.h"
+#include "test_all.h"
+
+int tests_run = 0;
+
 static char *all_tests() {
     all_tests_data();
     all_tests_memory();
