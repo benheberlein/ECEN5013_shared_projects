@@ -1,8 +1,14 @@
-/**************************************
-* This file contains implementations  *
-* for several memory management       *
-* functions.                          *
-**************************************/
+/**********************************************************
+* Name: memory.c
+* 
+* Date: 9/14/16
+*
+* Description: This module contains several memory 
+* manipulation functions.
+*
+* Author: Ben Heberlein
+*
+***********************************************************/
 
 #include "memory.h"
 

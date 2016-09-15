@@ -1,7 +1,15 @@
-/**************************************
-* This file holds the main routine    *
-* for the test executable.            *
-**************************************/
+/**********************************************************
+* Name: test_main.c
+*
+* Date: 9/14/16
+*
+* Description:
+* This file holds the main routine for
+* the test executable.
+*
+* Author: Ben Heberlein
+*
+***********************************************************/
 
 static char *all_tests() {
     all_tests_data();

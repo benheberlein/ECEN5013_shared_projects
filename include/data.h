@@ -1,8 +1,14 @@
-/**************************************
-* This file contains declarations for *
-* several data manipulation           *
-* functions.                          *
-**************************************/
+/**********************************************************
+* Name: data.h
+* 
+* Date: 9/14/16
+*
+* Description: This module contains several data 
+* manipulation functions.
+*
+* Author: Ben Heberlein
+*
+**********************************************************/
 
 #ifndef DATA_H
 #define DATA_H

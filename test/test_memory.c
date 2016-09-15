@@ -1,12 +1,19 @@
-/**************************************
-* This file contains unit tests for   *
-* several memory management           *
-* functions.                          *
-**************************************/
+/**********************************************************
+* Name: test_memory.c
+*
+* Date: 9/14/16
+*
+* Description:
+* This file contains unit tests for several memory
+* management functions.
+*
+* Author: Ben Heberlein
+*
+**********************************************************/
 
 #include "stdint.h"
 #include "memory.h"
-#include "munit.h"
+#include "minunit.h"
 
 static char *test_my_memmove() {
     //mu_assert("error_string", condition);

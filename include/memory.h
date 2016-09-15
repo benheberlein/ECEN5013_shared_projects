@@ -1,8 +1,14 @@
-/**************************************
-* This file contains declarations for *
-* several memory management           *
-* functions.                          *
-**************************************/
+/**********************************************************
+* Name: memory.h
+* 
+* Date: 9/14/16
+*
+* Description: This module contains several memory 
+* manipulation functions.
+*
+* Author: Ben Heberlein
+*
+***********************************************************/
 
 #ifndef MEMORY_H
 #define MEMORY_H

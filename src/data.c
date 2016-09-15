@@ -1,8 +1,14 @@
-/**************************************
-* This file contains implementations  *
-* for several data manipulation       *
-* functions.                          *
-**************************************/
+/**********************************************************
+* Name: data.c
+* 
+* Date: 9/14/16
+*
+* Description: This module contains several data 
+* manipulation functions.
+*
+* Author: Ben Heberlein
+*
+***********************************************************/
 
 #include "stdint.h"
 

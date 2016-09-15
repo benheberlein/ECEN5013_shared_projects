@@ -1,12 +1,19 @@
-/**************************************
-* This file contains unit tests for   *
-* several data manipulation           *
-* functions.                          *
-**************************************/
+/**********************************************************
+* Name: test_data.c
+*
+* Date: 9/14/16
+*
+* Description:
+* This file contains unit tests for several data 
+* manipulation functions
+*
+* Author: Ben Heberlein
+*
+***********************************************************/
 
 #include "stdint.h"
 #include "data.h"
-#include "munit.h"
+#include "minunit.h"
 
 static char *test_my_itoa() {
     //mu_assert("error_string", condition);
