@@ -94,7 +94,8 @@ LIB_NAME = libproject1.a
 # Test sources
 TEST_SRCS = test_main.c \
             test_data.c \
-            test_memory.c 
+            test_memory.c \
+            $(LIBS_SRCS)
 TEST_NAME = test
 TEST_OBJS := $(TEST_SRCS:.c=.o)
 
