@@ -22,5 +22,5 @@ int8_t my_memzero(uint8_t *src, uint32_t length) {
 } 
 
 int8_t my_reverse(uint8_t *src, uint32_t length) {
-    return 0;;
+    return 0;
 }

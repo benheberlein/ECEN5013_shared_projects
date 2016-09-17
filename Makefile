@@ -190,6 +190,5 @@ test: $(addprefix $(BUILD_DIR)/, $(TEST_OBJS))
 	@$(MKDIR_P) $(BIN_DIR)
 	$(CC) $(CFLAGS) -o $(BIN_DIR)/$@ $^
 	@echo Running unit tests...
-	@echo Test results:
 	@$(BIN_DIR)/$(TEST_NAME)
 

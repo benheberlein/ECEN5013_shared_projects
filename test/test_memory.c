@@ -14,9 +14,18 @@
 #include "stdint.h"
 #include "memory.h"
 #include "minunit.h"
+#include "stdio.h"
 
-char *test_my_memmove() {
-    
+static char *test_my_memmove() {
+    printf("Testing my_memmove\n");   
+
+    // Create errors to be passed up through functions
+    static char *error1 = "Could not move memory properly on non-overlapping buffers";
+    static char *error2 = "Successful memory move should return 0";
+    static char *error3 = "Could not move memory properly on overlapping buffers";
+    static char *error4 = "Overlapping memory move should preserve memory values";
+    static char *error5 = "Move length of zero should return 0 with memory unchanged";
+
     // Create memory buffer
     uint32_t buffer_length = 100;
     uint8_t buffer[buffer_length];
@@ -34,10 +43,9 @@ char *test_my_memmove() {
     int8_t error = my_memmove(buffer, buffer+first_length, first_length);
     if (error != -1) {
         for (uint32_t i = 0; i < first_length; i++) {
-            
-            mu_assert("Could not move memory properly on non-overlapping buffers", buffer[i] == buffer[i+first_length]);
+            mu_assert(error1, buffer[i] == buffer[i+first_length]);
         }
-        mu_assert("Successful memory move should return 0", error == 0);
+        mu_assert(error2, error == 0);
     }
 
     // Reinitialize data
@@ -48,25 +56,33 @@ char *test_my_memmove() {
   
     // Move overlapping
     error = my_memmove(buffer, buffer+second_length, first_length);
-    mu_assert("Overlapping memory move should return -2", error == -2);
-    for (uint32_t i = 0; i < first_length; i++) {
-        mu_assert("Overlapping memory move should preserve memory values", buffer[i] == i);
-        mu_assert("Overlapping memory move should preserve memory values", buffer[i+first_length] == 0);
+    if (error != -1) {
+        for (uint32_t i = 0; i < first_length; i++) {
+            mu_assert(error3, buffer[i + second_length] == i);
+        }
+    }
+
+    error = my_memmove(buffer+second_length, buffer, first_length);
+    if (error != -1) {
+        for (uint32_t i = 0; i < first_length; i++) {
+            mu_assert(error3, buffer[i] == i);
+        }
     }
 
     // Length 0 should preserve values
     error = my_memmove(buffer, buffer+first_length, 0);
-    mu_assert("Move length of zero should return 0 with memory unchanged", error == 0);
+    mu_assert(error5, error == 0);
     for (uint32_t i = 0; i < first_length; i++) {
-        mu_assert("Overlapping memory move should preserve memory values", buffer[i] == i);
-        mu_assert("Overlapping memory move should preserve memory values", buffer[i+first_length] == 0);
+        mu_assert(error4, buffer[i] == i);
+        mu_assert(error4, buffer[i+first_length] == 0);
     }
 
-    return 0;
+    return NULL;
 }
 
-char *test_my_memzero() {
- 
+static char *test_my_memzero() {
+    printf("Testing my_memzero\n");
+
     // Create memory buffer
     uint32_t buffer_length = 100;
     uint8_t buffer[buffer_length];
@@ -89,11 +105,12 @@ char *test_my_memzero() {
         mu_assert("Should return 0 for succesful memory clear", error == 0);
     }
 
-    return 0;
+    return NULL;
 }
 
-char *test_my_reverse() {
- 
+static char *test_my_reverse() {
+    printf("Testing my_reverse\n");
+
     // Create memory buffer
     uint32_t buffer_length = 100;
     uint8_t buffer[buffer_length];
@@ -113,16 +130,16 @@ char *test_my_reverse() {
         for (uint32_t i = first_length; i < buffer_length - first_length; i++) {
             mu_assert("Flipped memory outside of range.", buffer[i] == i % 10);
         }
-        mu_assert("Should return 0 for succesful memory flip clear", error == 0);
+        mu_assert("Should return 0 for succesful memory flip", error == 0);
     }
 
-    return 0;
+    return NULL;
 }
 
 char *all_tests_memory() {
     mu_run_test(test_my_memmove);
     mu_run_test(test_my_memzero);
     mu_run_test(test_my_reverse);
-    return 0;
+    return NULL;
 }
 

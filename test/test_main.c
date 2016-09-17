@@ -17,22 +17,23 @@
 
 int tests_run = 0;
 
-static char *all_tests() {
-    all_tests_data();
-    all_tests_memory();
+char *all_tests() {
+    mu_run_test_all(all_tests_data);
+    mu_run_test_all(all_tests_memory);
     //...
-    return 0;
+    return NULL;
 }
 
 int main() {
-     char *result = all_tests();
-     if (result != 0) {
-         printf("%s\n", result);
-     }
-     else {
-         printf("ALL TESTS PASSED\n");
+     char *result = NULL;
+     result = all_tests();
+     if (result != NULL) {
+        printf("TEST FAILED\n");
+        printf("%s\n", result);         
+     } else {
+        printf("ALL TESTS PASSED\n");
      }
      printf("Tests run: %d\n", tests_run);
  
-     return result != 0;
+     return 0;
 }
