@@ -14,33 +14,87 @@
 
 # Compile time flags with defaults
 ##########################################################
-# Optionsa are HOST, BBB or FRDM
+# Project version
+# Options are 1, 2, 3, 4
+PROJECT := 1
+
+# Host architecture
+# Options are HOST, BBB or FRDM
 PLATFORM := HOST
 
 # File upload address
-HOST_ADDR := root@192.168.7.2: # Options are any valid host (with directory)
+# Options are any valid host (with directory)
+HOST_ADDR := root@192.168.7.2:
+
+# Debug options
+# Options are TRUE or FALSE
+DEBUG := FALSE
+
+# Extra flags
+# Options are any extra compiler flag for given host
+FLAGS := NONE
+
+# Object dump options
+DUMP := FALSE 
 
 # Compiler executables
 ##########################################################
+# Set compiler and code size executables
 ifeq ($(PLATFORM), HOST)
- CC := gcc
+ CC   := gcc
+ SIZE := size
 else ifeq ($(PLATFORM), BBB)
  ifeq ($(UNAME_N), beaglebone)
-  CC := gcc
+  CC   := gcc
+  SIZE := size
  else
-  CC := arm-linux-gnueabi-gcc
+  CC   := arm-linux-gnueabi-gcc
+  SIZE := arm-linux-gnuaebi-size
  endif
 else ifeq ($(PLATFORM), FRDM)
- CC := arm-none-eabi-gcc
+ CC   := arm-none-eabi-gcc
+ SIZE := arm-none-eabi-size
 else
-$(error PLATFORM value must be HOST, BBB, or FRDM. Platform is $(PLATFORM))
+ $(error PLATFORM value must be HOST, BBB, or FRDM. Platform is $(PLATFORM))
 endif
 
-LD      = ld
-CFLAGS  = -Wall -Wextra -I$(INC_DIR) -std=c99
-LDFLAGS = -lc --entry main
-AR      = ar
-XFER    = scp
+# Construct compiler flags
+CFLAGS = -Wall -Wextra -std=c99 -I$(INC_DIR)
+ifeq ($(DEBUG), TRUE) 
+ CFLAGS += -g -O0
+endif
+ifneq ($(FLAGS), NONE)
+ CFLAGS += $(FLAGS)
+endif
+LDFLAGS = -Wl,-Map=$(BUILD_DIR)/$(MAP_NAME)
+
+ifeq ($(PROJECT), 1)
+ CFLAGS += -DPROJECT_1
+else ifeq ($(PROJECT), 2)
+ CFLAGS += -DPROJECT_2
+else ifeq ($(PROJECT), 3)
+ CFLAGS += -DPROJECT_3
+else ifeq ($(PROJECT), 4)
+ CFLAGS += -DPROJECT_4
+else
+ $(error PROJECT value must be 1, 2, 3, 4)
+endif
+
+# Dependency file generation
+DFLAGS = -M
+
+# Archive
+AR = ar
+
+# File transfer type
+XFER = scp
+
+# Object dump executable
+ifeq ($(DUMP), TRUE)
+ DP := objdump -d
+else
+ DP :=
+endif
 
 # Directories and search paths
 ##########################################################
@@ -67,14 +121,8 @@ UNAME_N = uname -n
 
 # Sources and objects
 ###########################################################
-# Output file name
-OUTPUT_NAME = project
-
-# Source files
-SRCS    = main.c \
-          data.c \
-          memory.c \
-          project1.c
+# Source files and project name
+include sources.mk
 
 # Associate each object file with a source
 OBJS := $(SRCS:.c=.o)
@@ -85,22 +133,17 @@ PRES := $(SRCS:.c=.i)
 # Assembly files
 ASSEMS := $(SRCS:.c=.s)
 
-# Library filee
-LIBS_SRCS = data.c \
-            memory.c
+# Library file
 LIBS_OBJS = $(LIB_SRCS:.c=.o)
 LIB_NAME = libproject1.a
 
+# Map file
+MAP_NAME = output.map
+
 # Test sources
-TEST_SRCS = test_main.c \
-            test_data.c \
-            test_memory.c \
-            $(LIBS_SRCS)
+TEST_SRCS += $(LIBS_SRCS)
 TEST_NAME = test
 TEST_OBJS := $(TEST_SRCS:.c=.o)
-
-# Dependency file generation
-DFLAGS = -M
 
 # Targets
 ###########################################################
@@ -110,7 +153,9 @@ all: build
 # Compile all objects to executable
 $(BIN_DIR)/$(OUTPUT_NAME): $(addprefix $(BUILD_DIR)/, $(OBJS))
 	@$(MKDIR_P) $(BIN_DIR)
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
+	$(SIZE) $@ 
+	$(DP) $@
 
 # remaps executable to the bin folder
 .PHONY: $(OUTPUT_NAME)
@@ -168,7 +213,7 @@ compile-all: $(addprefix $(BUILD_DIR)/, $(OBJS))
 .PHONY: upload
 upload: $(BIN_DIR)/$(OUTPUT_NAME)
 	@echo Uploading project to BBB with SCP
-	$(XFER) $(BIN_DIR)/$(OUTPUT_NAME) $(HOST_ADDR)
+	$(XFER) -r $(BIN_DIR)/$(OUTPUT_NAME) $(HOST_ADDR)
 
 # Build library from library sources
 .PHONY: build_lib

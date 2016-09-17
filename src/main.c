@@ -11,6 +11,14 @@
 #include "project1.h"
 
 int main(int argc, const char* argv[]) {
+
+    #ifdef PROJECT_1
     project_1_report();
+    #endif
+
+    #ifdef PROJECT_2
+    // ...
+    #endif
+
     return 0;
 }
