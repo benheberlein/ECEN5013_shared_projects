@@ -1,9 +1,9 @@
 /**********************************************************
 * Name: memory.h
-* 
+*
 * Date: 9/14/16
 *
-* Description: This module contains several memory 
+* Description: This module contains several memory
 * manipulation functions.
 *
 * Author: Ben Heberlein
@@ -12,6 +12,8 @@
 
 #ifndef MEMORY_H
 #define MEMORY_H
+
+#include <stdint.h>
 
 int8_t my_memmove(uint8_t *src, uint8_t *dst, uint32_t length);
 

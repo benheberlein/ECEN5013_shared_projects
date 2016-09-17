@@ -37,9 +37,9 @@ $(error PLATFORM value must be HOST, BBB, or FRDM. Platform is $(PLATFORM))
 endif
 
 LD      = ld
-CFLAGS  = -Wall -Wextra -I$(INC_DIR)
+CFLAGS  = -Wall -Wextra -I$(INC_DIR) -std=c99
 LDFLAGS = -lc --entry main
-AR      = ar 
+AR      = ar
 XFER    = scp
 
 # Directories and search paths
@@ -105,7 +105,7 @@ DFLAGS = -M
 # Targets
 ###########################################################
 # Default to compile project for default 'make'
-all: build 
+all: build
 
 # Compile all objects to executable
 $(BIN_DIR)/$(OUTPUT_NAME): $(addprefix $(BUILD_DIR)/, $(OBJS))
@@ -191,4 +191,3 @@ test: $(addprefix $(BUILD_DIR)/, $(TEST_OBJS))
 	$(CC) $(CFLAGS) -o $(BIN_DIR)/$@ $^
 	@echo Running unit tests...
 	@$(BIN_DIR)/$(TEST_NAME)
-

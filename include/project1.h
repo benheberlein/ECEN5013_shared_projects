@@ -1,6 +1,6 @@
 /**********************************************************
 * Name: project1.h
-* 
+*
 * Date: 9/14/16
 *
 * Description: This module contains the main routine for
@@ -14,6 +14,6 @@
 #define PROJECT1_H
 
 
-void project_1_report();
+void project_1();
 
 #endif
