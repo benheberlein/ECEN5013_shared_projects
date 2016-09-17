@@ -1,5 +1,5 @@
 # ECEN5013_shared_projects
-# Ben Heberlein, Jeff Venicx
+**Ben Heberlein, Jeff Venicx**
 ###########################################################
 This repository is for shared work on projects for ECEN5013 
 Embedded Software Essentials
@@ -26,7 +26,7 @@ finished executables.
 # Makefile Operations
 ###########################################################
 
-# Targets
+**Targets**
     The makefile can be used in the following ways.
 
     make build
@@ -78,7 +78,7 @@ finished executables.
         are successful, you should see 'ALL TESTS PASSED'
         and the number of tests run.
 
-# Input Options
+**Input Options**
     The Makefile contains several configurable options.
     These will be input as 'OPTION=VALUE' in the make
     command.

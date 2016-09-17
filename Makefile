@@ -39,25 +39,6 @@ DUMP := FALSE
 
 # Compiler executables
 ##########################################################
-# Set compiler and code size executables
-ifeq ($(PLATFORM), HOST)
- CC   := gcc
- SIZE := size
-else ifeq ($(PLATFORM), BBB)
- ifeq ($(UNAME_N), beaglebone)
-  CC   := gcc
-  SIZE := size
- else
-  CC   := arm-linux-gnueabi-gcc
-  SIZE := arm-linux-gnuaebi-size
- endif
-else ifeq ($(PLATFORM), FRDM)
- CC   := arm-none-eabi-gcc
- SIZE := arm-none-eabi-size
-else
- $(error PLATFORM value must be HOST, BBB, or FRDM. Platform is $(PLATFORM))
-endif
-
 # Construct compiler flags
 CFLAGS = -Wall -Wextra -std=c99 -I$(INC_DIR)
 ifeq ($(DEBUG), TRUE) 
@@ -79,6 +60,28 @@ else ifeq ($(PROJECT), 4)
 else
  $(error PROJECT value must be 1, 2, 3, 4)
 endif
+
+# Set compiler and code size executables
+ifeq ($(PLATFORM), HOST)
+ CC   := gcc
+ SIZE := size
+else ifeq ($(PLATFORM), BBB)
+ ifeq ($(UNAME_N), beaglebone)
+  CC   := gcc
+  SIZE := size
+ else
+  CC   := arm-linux-gnueabi-gcc
+  SIZE := arm-linux-gnuaebi-size
+ endif
+else ifeq ($(PLATFORM), FRDM)
+ CC   := arm-none-eabi-gcc
+ SIZE := arm-none-eabi-size
+else
+ $(error PLATFORM value must be HOST, BBB, or FRDM. Platform is $(PLATFORM))
+endif
+
+# Compile time flag for host
+CFLAGS += -D$(HOST)
 
 # Dependency file generation
 DFLAGS = -M
