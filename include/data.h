@@ -1,9 +1,9 @@
 /**********************************************************
 * Name: data.h
-* 
+*
 * Date: 9/14/16
 *
-* Description: This module contains several data 
+* Description: This module contains several data
 * manipulation functions.
 *
 * Author: Ben Heberlein
@@ -15,7 +15,7 @@
 
 #include "stdint.h"
 
-int8_t *my_itoa(int8_t *src, int32_t data, int32_t length);
+int8_t *my_itoa(int8_t *str, int32_t data, int32_t base);
 
 int32_t my_atoi(int8_t *str);
 

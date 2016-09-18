@@ -11,10 +11,40 @@
 ***********************************************************/
 
 #include "stdint.h"
+#include "data.h"
+#include "memory.h"
+#include <string.h>
 #include <stdio.h>
 
-int8_t *my_itoa(int8_t *src, int32_t data, int32_t length) {
+int8_t *my_itoa(int8_t *str, int32_t data, int32_t base) {
+    //array for storing ascii string
+    int8_t string[256];
+    int i = 0;
+    int8_t sign = 1;
 
+    if (data < 0){
+      printf("-");
+      sign = -1;
+      data = data *-1;
+    }
+
+    //entered in reverse order must use reverse
+    while(data != 0){
+        string[i] = data%base + '0';
+        i++;
+        data = data/base;
+    }
+    //add the negative sign
+    if(sign < 1){
+      string[i] = '-';
+      i++;
+    }
+    //add null terminator
+    string[i] = '\0';
+    //reverse the string
+    my_reverse(string, i);
+    str = string;
+    return string;
 }
 
 int32_t my_atoi(int8_t *str) {
@@ -70,6 +100,6 @@ uint32_t big_to_little(uint32_t data) {
 }
 
 uint32_t little_to_big(uint32_t data) {
-  
+
     return big_to_little( data);
 }
