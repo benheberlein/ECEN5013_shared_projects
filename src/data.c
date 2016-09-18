@@ -42,6 +42,20 @@ int32_t my_atoi(int8_t *str) {
 
 void dump_memory(uint8_t *start, uint32_t length) {
 
+    if(!start) printf("invalid start addresse\n");
+
+    if(length < 1) printf("invalid length < 1\n");
+
+    uint8_t *ptr = start;
+
+    //printf("%x ", *ptr);
+
+    for(uint32_t i = 0; i < length; i++){
+        printf("%x ", *ptr);
+        ptr++;
+    }
+    printf("\n");
+
 }
 
 uint32_t big_to_little(uint32_t data) {
