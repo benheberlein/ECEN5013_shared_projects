@@ -92,7 +92,6 @@ uint32_t big_to_little(uint32_t data) {
                ((data<<8)&0xff0000)|
                ((data>>8)&0xff00)|
               ((data<<24)&0xff000000);
-
   return return_val;
 }
 

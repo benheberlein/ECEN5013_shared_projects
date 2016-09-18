@@ -93,11 +93,11 @@ static char *test_big_to_little() {
     static char *error4 = "Failed to convert a 4 byte number";
     static char *error5 = "Failed to convert an 8 byte number";
 
-    mu_assert(error1, big_to_little(0x000A) == 0xA000);
-    mu_assert(error2, big_to_little(0x00AB) == 0xBA00);
-    mu_assert(error3, big_to_little(0x0ABC) == 0xCBA0);
-    mu_assert(error4, big_to_little(0xABCD) == 0xDCBA);
-    mu_assert(error5, big_to_little(0xABCDEF12) == 0x21FEDCBA);
+    mu_assert(error1, big_to_little(0x0000000A) == 0x0A000000);
+    mu_assert(error2, big_to_little(0x000000AB) == 0xAB000000);
+    mu_assert(error3, big_to_little(0x00000ABC) == 0xBC0A0000);
+    mu_assert(error4, big_to_little(0xABCD) == 0xCDAB0000);
+    mu_assert(error5, big_to_little(0xABCDEF12) == 0x12EFCDAB);
 
     return NULL;
 }
@@ -111,11 +111,11 @@ static char *test_little_to_big() {
     static char *error4 = "Failed to convert a 4 byte number";
     static char *error5 = "Failed to convert an 8 byte number";
 
-    mu_assert(error1, little_to_big(0xA000) == 0x000A);
-    mu_assert(error2, little_to_big(0xBA00) == 0x00AB);
-    mu_assert(error3, little_to_big(0xCBA0) == 0x0ABC);
-    mu_assert(error4, little_to_big(0xDCBA) == 0xABCD);
-    mu_assert(error5, little_to_big(0x21FEDCBA) == 0xABCDEF21);
+    mu_assert(error1, little_to_big(0xA0000000) == 0x000000A0);
+    mu_assert(error2, little_to_big(0xAB000000) == 0x000000AB);
+    mu_assert(error3, little_to_big(0xBC0A0000) == 0x00000ABC);
+    mu_assert(error4, little_to_big(0xCDAB0000) == 0xABCD);
+    mu_assert(error5, little_to_big(0x21EFCDAB) == 0xABCDEF21);
 
     return NULL;
 }
