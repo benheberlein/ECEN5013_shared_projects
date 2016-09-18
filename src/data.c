@@ -11,6 +11,7 @@
 ***********************************************************/
 
 #include "stdint.h"
+#include <stdio.h>
 
 int8_t *my_itoa(int8_t *src, int32_t data, int32_t length) {
 
@@ -55,13 +56,20 @@ void dump_memory(uint8_t *start, uint32_t length) {
         ptr++;
     }
     printf("\n");
-
 }
 
 uint32_t big_to_little(uint32_t data) {
+  uint32_t return_val;
 
+  return_val = ((data>>24)&0xff)|
+               ((data<<8)&0xff0000)|
+               ((data>>8)&0xff00)|
+              ((data<<24)&0xff000000);
+
+  return return_val;
 }
 
 uint32_t little_to_big(uint32_t data) {
-
+  
+    return big_to_little( data);
 }
