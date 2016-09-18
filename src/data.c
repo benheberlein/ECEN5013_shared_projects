@@ -76,10 +76,10 @@ void dump_memory(uint8_t *start, uint32_t length) {
 
     uint8_t *ptr = start;
 
-    //printf("%x ", *ptr);
-
     for(uint32_t i = 0; i < length; i++){
-        printf("%x ", *ptr);
+
+        if(!(i%11) & i != 0) printf("\n");
+        printf("%02X ", *ptr);
         ptr++;
     }
     printf("\n");
