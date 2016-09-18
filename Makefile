@@ -81,7 +81,7 @@ else
 endif
 
 # Compile time flag for host
-CFLAGS += -D$(HOST)
+CFLAGS += -D$(PLATFORM)
 
 # Dependency file generation
 DFLAGS = -M
