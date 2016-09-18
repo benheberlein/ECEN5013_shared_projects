@@ -67,6 +67,10 @@ finished executables.
         Black can be configured with the HOST_ADDR
         variable. 
 
+    make dump
+        This takes the final output executable and performs
+        an objdump command on the output.
+
     make clean
         This removes all generated files in the 'build' 
         and 'bin' directories.
@@ -109,7 +113,14 @@ finished executables.
         This option sets the flags -g and -O0 for gcc.
         
         Possible values: TRUE, FALSE
-        DEFAULT VALUE: FALSE
+        Default value: FALSE
+
+    WARNINGS
+        This option sets the flags -Wall and -Wextra for
+        the gcc compiler.
+
+        Possible values: TRUE, FALSE
+        Default value: FALSE
 
     FLAGS
         This option allows the user to pass in multiple 
@@ -119,10 +130,4 @@ finished executables.
         Possible values: any valid gcc flag
         Default value: NONE
 
-    DUMP
-        This option allows the user to show the object dump
-        of the final executable using objdump
-
-        Possible values: TRUE, FALSE
-        Default value: FALSE
 

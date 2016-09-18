@@ -30,22 +30,26 @@ HOST_ADDR := root@192.168.7.2:
 # Options are TRUE or FALSE
 DEBUG := FALSE
 
+# Compiler warnings
+# Options are TRUE or FALSE
+WARNINGS = FALSE
+
 # Extra flags
 # Options are any extra compiler flag for given host
 FLAGS := NONE
 
-# Object dump options
-DUMP := FALSE 
-
 # Compiler executables
 ##########################################################
 # Construct compiler flags
-CFLAGS = -Wall -Wextra -std=c99 -I$(INC_DIR)
+CFLAGS = -std=c99 -I$(INC_DIR)
 ifeq ($(DEBUG), TRUE) 
  CFLAGS += -g -O0
 endif
 ifneq ($(FLAGS), NONE)
  CFLAGS += $(FLAGS)
+endif
+ifeq ($(WARNINGS), TRUE)
+ CFLAGS += -Wall -Wextra
 endif
 LDFLAGS = -Wl,-Map=$(BUILD_DIR)/$(MAP_NAME)
 
@@ -93,11 +97,7 @@ AR = ar
 XFER = scp
 
 # Object dump executable
-ifeq ($(DUMP), TRUE)
- DP := objdump -d
-else
- DP :=
-endif
+DUMP := objdump -d
 
 # Directories and search paths
 ##########################################################
@@ -158,7 +158,11 @@ $(BIN_DIR)/$(OUTPUT_NAME): $(addprefix $(BUILD_DIR)/, $(OBJS))
 	@$(MKDIR_P) $(BIN_DIR)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
 	$(SIZE) $@ 
-	$(DP) $@
+
+# Invoke dump on project output
+.PHONY: dump
+dump: $(BIN_DIR)/$(OUTPUT_NAME)
+	$(DUMP) $^
 
 # remaps executable to the bin folder
 .PHONY: $(OUTPUT_NAME)
