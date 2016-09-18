@@ -14,6 +14,6 @@
 #define PROJECT1_H
 
 
-void project_1();
+void project_1_report();
 
 #endif
