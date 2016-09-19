@@ -35,7 +35,7 @@ int8_t my_memmove(uint8_t *src, uint8_t *dst, uint32_t length) {
       }
     }
 
-    //if dest < src start at begining to prevent overlap
+    //if dest >src start at begining to prevent overlap
     else if(src > dst) {
 
       for(uint32_t i = 0; i < length; i++){
@@ -45,7 +45,7 @@ int8_t my_memmove(uint8_t *src, uint8_t *dst, uint32_t length) {
       }
     }
 
-    //wtf? either src and dst are the same or shit went bad
+    //unknown error
     else return -1;
 
     return 0;

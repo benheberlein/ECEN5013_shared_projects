@@ -53,20 +53,17 @@ int32_t my_atoi(int8_t *str) {
 
     int8_t *pos = str;
 
-    printf("%d\n", *pos);
-
-
     if(*pos == '-'){
       sign = -1;
       pos++;
     }
 
     while(*pos != '\0'){
-      printf("position value: %d\n", *pos);
+      if( (*pos < '0') | (*pos > '9')) return 0;
       result = result * 10;
       result = result + *pos -'0';
-      printf("inline results: %d\n", result);
       pos++;
+      if(result > 127 | result < -128) return 0;
     }
     return result*sign;
 }
@@ -79,10 +76,10 @@ void dump_memory(uint8_t *start, uint32_t length) {
 
     uint8_t *ptr = start;
 
-    //printf("%x ", *ptr);
-
     for(uint32_t i = 0; i < length; i++){
-        printf("%x ", *ptr);
+
+        if(!(i%11) & i != 0) printf("\n");
+        printf("%02X ", *ptr);
         ptr++;
     }
     printf("\n");
@@ -95,7 +92,6 @@ uint32_t big_to_little(uint32_t data) {
                ((data<<8)&0xff0000)|
                ((data>>8)&0xff00)|
               ((data<<24)&0xff000000);
-
   return return_val;
 }
 
