@@ -16,6 +16,17 @@
 #include <string.h>
 #include <stdio.h>
 
+/****************************************************************************
+*my_itoa  : int8_t *my_itoa(int8_t *str, int32_t data, int32_t base);
+*   returns  : array pointer of trasnformed data
+*   str      : array pointer for transformed data
+*   data     : number to be transformed
+*   base     : base number value
+*Created by  : Jeff Venicx
+*Date        : 9-16-16
+*Description : takes a interger and converts it into ASCII string
+*Notes       : Only works with base 10 or lower
+****************************************************************************/
 int8_t *my_itoa(int8_t *str, int32_t data, int32_t base) {
     //array for storing ascii string
     static int8_t string[256];
@@ -51,6 +62,14 @@ int8_t *my_itoa(int8_t *str, int32_t data, int32_t base) {
     return string;
 }
 
+/****************************************************************************
+*my_atoi     : int32_t my_atoi(int8_t *str);
+*   returns  : number value
+*   str      : string pointer of ASCII
+*Created by  : Jeff Venicx
+*Date        : 9-16-16
+*Description : takes in ASCII string and converts it too interger
+****************************************************************************/
 int32_t my_atoi(int8_t *str) {
     //result storage variable
     int32_t result = 0;
@@ -78,6 +97,15 @@ int32_t my_atoi(int8_t *str) {
     return result*sign;
 }
 
+/****************************************************************************
+*dump_memory : void dump_memory(uint8_t *start, uint32_t length);
+*   returns  : void
+*   start    : starting address
+*   length   : length of data
+*Created by  : Jeff Venicx
+*Date        : 9-16-16
+*Description : printf memory of length starting at address start
+****************************************************************************/
 void dump_memory(uint8_t *start, uint32_t length) {
 
     if(!start) printf("invalid start addresse\n");
@@ -93,6 +121,14 @@ void dump_memory(uint8_t *start, uint32_t length) {
     printf("\n");
 }
 
+/****************************************************************************
+*big_to_little: uint32_t big_to_little(uint32_t data);
+*   returns   : transformed data
+*   data      : date to be transformed
+*Created by   : Jeff Venicx
+*Date         : 9-16-16
+*Description  : convert from big to little endian
+****************************************************************************/
 uint32_t big_to_little(uint32_t data) {
     //the value to be returned
     uint32_t return_val;
@@ -104,6 +140,14 @@ uint32_t big_to_little(uint32_t data) {
     return return_val;
 }
 
+/****************************************************************************
+*little_to_big: uint32_t big_to_little(uint32_t data);
+*   returns   : transformed data
+*   data      : date to be transformed
+*Created by   : Jeff Venicx
+*Date         : 9-16-16
+*Description  : convert from little to big endian
+****************************************************************************/
 uint32_t little_to_big(uint32_t data) {
     //endianness change is the same in either direction
     return big_to_little( data);
