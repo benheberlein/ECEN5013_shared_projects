@@ -6,7 +6,7 @@
 * Description: This module contains several data
 * manipulation functions.
 *
-* Author: Ben Heberlein
+* Author: Ben Heberlein & Jeff Venicx
 *
 ***********************************************************/
 
@@ -83,29 +83,28 @@ void dump_memory(uint8_t *start, uint32_t length) {
     if(!start) printf("invalid start addresse\n");
 
     if(length < 1) printf("invalid length < 1\n");
-
-    uint8_t *ptr = start;
-
+    //iterate through memory and dump
     for(uint32_t i = 0; i < length; i++){
-
+        //new line after 11 bytes
         if(!(i%11) & i != 0) printf("\n");
-        printf("%02X ", *ptr);
-        ptr++;
+        printf("%02X ", *start);
+        start++;
     }
     printf("\n");
 }
 
 uint32_t big_to_little(uint32_t data) {
-  uint32_t return_val;
-
-  return_val = ((data>>24)&0xff)|
-               ((data<<8)&0xff0000)|
-               ((data>>8)&0xff00)|
-              ((data<<24)&0xff000000);
-  return return_val;
+    //the value to be returned
+    uint32_t return_val;
+    //shift and mask data
+    return_val = ((data>>24)&0xff)|
+                 ((data<<8)&0xff0000)|
+                 ((data>>8)&0xff00)|
+                ((data<<24)&0xff000000);
+    return return_val;
 }
 
 uint32_t little_to_big(uint32_t data) {
-
+    //endianness change is the same in either direction
     return big_to_little( data);
 }
