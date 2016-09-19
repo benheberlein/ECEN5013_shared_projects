@@ -15,14 +15,12 @@
 #include <stdio.h>
 
 void project_1_report() {
+    //initialize report array and pointers
     uint8_t array[32];
-    uint8_t *aptr_1;
-    uint8_t *aptr_2;
-    uint8_t *aptr_3;
+    uint8_t *aptr_1 = array;
+    uint8_t *aptr_2 = &array[8];
+    uint8_t *aptr_3 = &array[16];
 
-    aptr_1 = array;
-    aptr_2 = &array[8];
-    aptr_3 = &array[16];
 
     //aptr_1: Initialize 16 bytes starting at
     //this aptr_1 to the numbers from 31-46.
