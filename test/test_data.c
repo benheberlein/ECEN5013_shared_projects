@@ -29,7 +29,7 @@ static char *test_my_itoa() {
     int32_t data = 104;
     int32_t base = 10;
     int8_t *ret = my_itoa(str, data, base);
-    
+
     mu_assert(error1, *ret == '1');
     mu_assert(error1, *(ret+1) == '0');
     mu_assert(error1, *(ret+2) == '4');
@@ -37,7 +37,7 @@ static char *test_my_itoa() {
     data = -104;
 
     ret = my_itoa(str, data, base);
-     
+
     mu_assert(error2, *ret == '-');
     mu_assert(error2, *(ret+1) == '1');
     mu_assert(error2, *(ret+2) == '0');
@@ -55,13 +55,13 @@ static char *test_my_itoa() {
 
     data = 0xABC;
     base = 16;
-   
+
     ret = my_itoa(str, data, base);
-    
+
     mu_assert(error4, *ret == 'A');
     mu_assert(error4, *(ret+1) == 'B');
     mu_assert(error4, *(ret+2) == 'C');
- 
+
     return NULL;
 }
 

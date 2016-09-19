@@ -19,25 +19,26 @@
 int8_t *my_itoa(int8_t *str, int32_t data, int32_t base) {
     //array for storing ascii string
     static int8_t string[256];
+    //functional iterator variable
     int i = 0;
+    //sign flag
     int8_t sign = 1;
-
+    //check for negative number
     if (data < 0){
       printf("-");
       sign = -1;
       data = data *-1;
     }
-
-    //entered in reverse order must use reverse
+    //add digits to ASCII string
     while(data != 0){
-        string[i] = data%base + '0';
+        string[i] = data % base + '0';
         if (string[i] >= 10 + '0') {
             string[i] = string[i] + 7;
         }
         i++;
         data = data/base;
     }
-    //add the negative sign
+    //add the negative sign to array
     if(sign < 1){
       string[i] = '-';
       i++;
@@ -51,23 +52,29 @@ int8_t *my_itoa(int8_t *str, int32_t data, int32_t base) {
 }
 
 int32_t my_atoi(int8_t *str) {
+    //result storage variable
     int32_t result = 0;
+    //sign flag
     int8_t sign = 1;
-
-    int8_t *pos = str;
-
-    if(*pos == '-'){
+    //check for negative value
+    if(*str == '-'){
       sign = -1;
-      pos++;
+      str++;
+      printf("negative\n");
     }
-
-    while(*pos != '\0'){
-      if( (*pos < '0') | (*pos > '9')) return 0;
+    //convert ASCII to value
+    while(*str != '\0'){
+      //check ASCII value is a number
+      if((*str < '0') | (*str > '9')) return 0;
+      //
       result = result * 10;
-      result = result + *pos -'0';
-      pos++;
-      if(result > 127 | result < -128) return 0;
+      result = result + *str -'0';
+      str++;
+      //check if value rolled over
+      //aka it was to large for the data type
+      if(result < 0) return 0;
     }
+    //return result multiplied by sign
     return result*sign;
 }
 
