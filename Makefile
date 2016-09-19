@@ -75,7 +75,7 @@ else ifeq ($(PLATFORM), BBB)
   SIZE := size
  else
   CC   := arm-linux-gnueabi-gcc
-  SIZE := arm-linux-gnuaebi-size
+  SIZE := arm-linux-gnueabi-size
  endif
 else ifeq ($(PLATFORM), FRDM)
  CC   := arm-none-eabi-gcc
@@ -86,6 +86,11 @@ endif
 
 # Compile time flag for host
 CFLAGS += -D$(PLATFORM)
+
+# Freedom Freescale flags
+ifeq ($(PLATFORM), FRDM)
+CFLAGS += --specs=nosys.specs
+endif
 
 # Dependency file generation
 DFLAGS = -M

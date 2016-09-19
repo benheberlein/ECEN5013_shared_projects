@@ -24,11 +24,44 @@ static char *test_my_itoa() {
     static char *error2 = "Failed to convert negative number";
     static char *error3 = "Failed to convert binary number";
     static char *error4 = "Failed to convert hex number";
-    static char *error5 = "Should return -1 for invalid bases";
 
-    //mu_assert("error_string", condition);
-    //...
-    //...
+    int8_t *str;
+    int32_t data = 104;
+    int32_t base = 10;
+    int8_t *ret = my_itoa(str, data, base);
+    
+    mu_assert(error1, *ret == '1');
+    mu_assert(error1, *(ret+1) == '0');
+    mu_assert(error1, *(ret+2) == '4');
+
+    data = -104;
+
+    ret = my_itoa(str, data, base);
+     
+    mu_assert(error2, *ret == '-');
+    mu_assert(error2, *(ret+1) == '1');
+    mu_assert(error2, *(ret+2) == '0');
+    mu_assert(error2, *(ret+3) == '4');
+
+    data = 0xA;
+    base = 2;
+
+    ret = my_itoa(str, data, base);
+
+    mu_assert(error3, *ret == '1');
+    mu_assert(error3, *(ret+1) == '0');
+    mu_assert(error3, *(ret+2) == '1');
+    mu_assert(error3, *(ret+3) == '0');
+
+    data = 0xABC;
+    base = 16;
+   
+    ret = my_itoa(str, data, base);
+    
+    mu_assert(error4, *ret == 'A');
+    mu_assert(error4, *(ret+1) == 'B');
+    mu_assert(error4, *(ret+2) == 'C');
+ 
     return NULL;
 }
 

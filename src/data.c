@@ -18,7 +18,7 @@
 
 int8_t *my_itoa(int8_t *str, int32_t data, int32_t base) {
     //array for storing ascii string
-    int8_t string[256];
+    static int8_t string[256];
     int i = 0;
     int8_t sign = 1;
 
@@ -31,6 +31,9 @@ int8_t *my_itoa(int8_t *str, int32_t data, int32_t base) {
     //entered in reverse order must use reverse
     while(data != 0){
         string[i] = data%base + '0';
+        if (string[i] >= 10 + '0') {
+            string[i] = string[i] + 7;
+        }
         i++;
         data = data/base;
     }
