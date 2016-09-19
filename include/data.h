@@ -6,7 +6,7 @@
 * Description: This module contains several data
 * manipulation functions.
 *
-* Author: Ben Heberlein
+* Author: Ben Heberlein & Jeff Venicx
 *
 **********************************************************/
 

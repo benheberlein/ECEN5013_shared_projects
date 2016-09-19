@@ -6,7 +6,7 @@
 * Description: This module contains several memory
 * manipulation functions.
 *
-* Author: Ben Heberlein <3 Jeff Venicx
+* Author: Ben Heberlein & Jeff Venicx
 *
 ***********************************************************/
 

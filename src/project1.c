@@ -6,7 +6,7 @@
 * Description: This module contains the main routine for
 * ECEN 5013 project 1
 *
-* Author: Ben Heberlein
+* Author: Ben Heberlein & Jeff Venicx
 *
 **********************************************************/
 #include "project1.h"
