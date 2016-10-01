@@ -9,6 +9,10 @@
 *
 ***********************************************************/
 #include "project1.h"
+#ifdef FRDM
+#include "MKL25Z4.h"
+#include "uart.h"
+#endif
 
 int main(int argc, const char* argv[]) {
 
@@ -17,8 +21,14 @@ int main(int argc, const char* argv[]) {
     #endif
 
     #ifdef PROJECT_2
-    // ...
+
+    init_uart();
+    while(1) {
+    	//tx_char((uint8_t) 'z');
+    }
+
     #endif
+
 
     return 0;
 }
