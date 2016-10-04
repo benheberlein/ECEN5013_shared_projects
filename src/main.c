@@ -13,6 +13,7 @@
 #include "MKL25Z4.h"
 #include "uart.h"
 #endif
+#include "log.h"
 
 int main(int argc, const char* argv[]) {
 
@@ -22,13 +23,15 @@ int main(int argc, const char* argv[]) {
 
     #ifdef PROJECT_2
 
+    #ifdef FRDM
     init_uart();
+	#endif
+
     while(1) {
-    	//tx_char((uint8_t) 'z');
+    //	Log0("Hello World!", 12);
     }
 
     #endif
-
 
     return 0;
 }

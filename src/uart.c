@@ -11,8 +11,9 @@
 ***********************************************************/
 #include "MKL25Z4.h"
 #include <stdint.h>
+#include "log.h"
 
-#define BAUD_RATE 	115200
+#define BAUD_RATE 	57600
 #define OVERSAMPLE 	16
 
 uint8_t init_uart() {
@@ -52,8 +53,9 @@ uint8_t tx_char(uint8_t ch) {
 	UART0_D_REG(UART0_BASE_PTR) = ch;
 }
 
-uint8_t tx_string(uint8_t *str) {
-	while(*str) {
+uint8_t tx_string(uint8_t *str, int32_t length) {
+	while(length > 0) {
+		length--;
 		tx_char(*str++);
 	}
 }
@@ -63,5 +65,13 @@ void UART0_IRQHandler (void) {
   if (UART0_S1 & UART_S1_RDRF_MASK) {
     ch = UART0_D;
   }
-  tx_char(ch);
+  Log0("Hello world!", 12);
+  //tx_char(ch);
+  static uint8_t payload[100];
+  payload[0] = 'p';
+  payload[1] = 'a';
+  payload[2] = 'y';
+  payload[3] = 'l';
+  payload[99] = 'Q';
+  Log1("Hello world with payload!", 25, payload, 100);
 }
