@@ -12,12 +12,16 @@
 #include "MKL25Z4.h"
 #include <stdint.h>
 #include "log.h"
+#include "timer.h"
 
 #define BAUD_RATE 	57600
 #define OVERSAMPLE 	16
 
+uint8_t echo = 0;
+
 uint8_t init_uart() {
 	// Enable port A
+
 	SIM_SCGC5 |= SIM_SCGC5_PORTA_MASK;
 	// Enable UART Rx on pin PTA1
 	PORTA_PCR1 = PORT_PCR_MUX(0x2);
@@ -61,17 +65,66 @@ uint8_t tx_string(uint8_t *str, int32_t length) {
 }
 
 void UART0_IRQHandler (void) {
-  uint8_t ch = 0;
-  if (UART0_S1 & UART_S1_RDRF_MASK) {
-    ch = UART0_D;
+	uint8_t ch = 0;
+	// Check for Rx character
+	if (UART0_S1 & UART_S1_RDRF_MASK) {
+		ch = UART0_D;
+	} else {
+		return;
+	}
+
+	if (ch == 'e' || ch == 'E') {
+		// Toggle echo mode
+		echo = !echo;
+		if (echo) {
+			tx_string("Entered echo mode.", 18);
+			tx_char('\r');
+		} else {
+			tx_string("Exited echo mode.", 17);
+			tx_char('\r');
+		}
+		return;
+	}
+
+	if (echo) {
+		tx_char(ch);
+		return;
+	}
+
+	switch (ch) {
+	case ('z'):
+		change_duty(-5);
+		break;
+	case ('Z'):
+		change_duty(-5);
+		break;
+	case ('x'):
+		change_duty(5);
+		break;
+	case ('X'):
+		change_duty(5);
+		break;
+	case ('r'):
+		toggle_led(RED);
+		break;
+	case ('b'):
+		toggle_led(BLUE);
+		break;
+	case ('g'):
+		toggle_led(GREEN);
+		break;
+	case ('R'):
+		toggle_led(RED);
+		break;
+	case ('B'):
+		toggle_led(BLUE);
+		break;
+	case ('G'):
+		toggle_led(GREEN);
+		break;
+
+	default:
+		__NOP;
+
   }
-  Log0("Hello world!", 12);
-  //tx_char(ch);
-  static uint8_t payload[100];
-  payload[0] = 'p';
-  payload[1] = 'a';
-  payload[2] = 'y';
-  payload[3] = 'l';
-  payload[99] = 'Q';
-  Log1("Hello world with payload!", 25, payload, 100);
 }

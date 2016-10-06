@@ -11,8 +11,6 @@
 
 #include <stdint.h>
 
-void UART0_IRQHandler (void);
-
 uint8_t init_uart();
 
 uint8_t tx_char(uint8_t ch);
