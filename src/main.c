@@ -15,6 +15,7 @@
 #include "timer.h"
 #endif
 #include "log.h"
+#include "test_circbuf.h"
 
 int main(int argc, const char* argv[]) {
 
@@ -23,11 +24,12 @@ int main(int argc, const char* argv[]) {
     #endif
 
     #ifdef PROJECT_2
-
     #ifdef FRDM
     init_uart();
     init_timer();
 	#endif
+
+    test_circbuf_all();
 
     while(1) {
     	__NOP;

@@ -76,7 +76,7 @@ uint8_t change_duty(int8_t change) {
 	}
 }
 
-uint8_t toggle_led(LED led) {
+uint8_t toggle_led(led_t led) {
 	if (led == RED) {
 		RED_EN = !RED_EN;
 	} else if (led == GREEN) {

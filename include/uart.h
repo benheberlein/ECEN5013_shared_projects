@@ -9,6 +9,9 @@
 *
 ***********************************************************/
 
+#ifndef UART_H
+#define UART_H
+
 #include <stdint.h>
 
 uint8_t init_uart();
@@ -16,3 +19,5 @@ uint8_t init_uart();
 uint8_t tx_char(uint8_t ch);
 
 uint8_t tx_string(uint8_t *str, int32_t length);
+
+#endif

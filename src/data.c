@@ -59,7 +59,7 @@ int8_t *my_itoa(int8_t *str, int32_t data, int32_t base) {
     //reverse the string
     my_reverse(string, i);
     str = string;
-    return string;
+    return str;
 }
 
 /****************************************************************************

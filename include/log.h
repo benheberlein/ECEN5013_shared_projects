@@ -10,8 +10,13 @@
 *
 ***********************************************************/
 
+#ifndef LOG_H
+#define LOG_H
+
 #include <stdint.h>
 
 void Log0(uint8_t *data, int32_t length);
 
 void Log1(uint8_t *data, int32_t length, uint8_t *param, int32_t param_size);
+
+#endif
