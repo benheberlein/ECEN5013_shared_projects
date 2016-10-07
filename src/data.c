@@ -28,38 +28,35 @@
 *Notes       : Only works with base 10 or lower
 ****************************************************************************/
 int8_t *my_itoa(int8_t *str, int32_t data, int32_t base) {
-    //array for storing ascii string
-    static int8_t string[256];
+
     //functional iterator variable
     int i = 0;
     //sign flag
     int8_t sign = 1;
     //check for negative number
     if (data < 0){
-      printf("-");
       sign = -1;
       data = data *-1;
     }
     //add digits to ASCII string
     while(data != 0){
-        string[i] = data % base + '0';
-        if (string[i] >= 10 + '0') {
-            string[i] = string[i] + 7;
+        str[i] = data % base + '0';
+        if (str[i] >= 10 + '0') {
+            str[i] = str[i] + 7;
         }
         i++;
         data = data/base;
     }
     //add the negative sign to array
     if(sign < 1){
-      string[i] = '-';
+      str[i] = '-';
       i++;
     }
     //add null terminator
-    string[i] = '\0';
+    str[i] = '\0';
     //reverse the string
-    my_reverse(string, i);
-    str = string;
-    return string;
+    my_reverse(str, i);
+    return str;
 }
 
 /****************************************************************************
@@ -151,4 +148,45 @@ uint32_t big_to_little(uint32_t data) {
 uint32_t little_to_big(uint32_t data) {
     //endianness change is the same in either direction
     return big_to_little( data);
+}
+
+/****************************************************************************
+*ftoa         : void ftoa(float value, uint8_t *ascii);
+*   returns   : void
+*   value     : float value to be transformed to ascii
+*   ascii     : array with ascii values of value
+*Created by   : Jeff Venicx
+*Date         : 10-5-16
+*Description  : convert a float into a array of ascii
+****************************************************************************/
+
+void ftoa(float value, uint8_t *ascii){
+  //extract interger
+  int interger = (int)value;
+  //printf("interger part: %d\n", interger);
+
+  //extract float portion
+  int multiplier = 1;
+  if(interger < 0){
+    multiplier = -1;
+  }
+  float fraction = value - (float)interger;
+  fraction = fraction * 1000 * multiplier;
+  //printf("fraction part*1000: %f\n", fraction);
+
+  my_itoa(ascii, interger, 10);
+  int i = strlen(ascii);
+
+  ascii[i] = 46;
+  i++;
+  fraction = (int)fraction;
+  my_itoa(&ascii[i],fraction, 10);
+
+  /*
+  printf("ascii buffer values:\n");
+  for (int i=0; i < 32; i++){
+    printf("%u ", ascii[i]);
+  }
+  printf("\n");
+*/
 }
