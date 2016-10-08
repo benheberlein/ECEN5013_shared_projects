@@ -9,9 +9,6 @@
 *
 ***********************************************************/
 
-#include "project1.h"
-#include "log.h"
-
 #ifdef FRDM
 #include "MKL25Z4.h"
 #include "uart.h"
