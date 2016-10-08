@@ -316,9 +316,21 @@ void test_circbuf_destroy() {
 
 	uint8_t fail = 0;
 
-	circbuf_t cb = NULL;
+	circbuf_t *cb = NULL;
 
-	
+	//destroy NULL pointer
+	if(circbuf_destroy(cb) == -1);
+	else fail == 1;
+
+	//destroy a circbuf
+	cb = circbuf_initialize(10);
+	if(circbuf_destroy(cb) == 0);
+	else fail == 2;
+
+	//NULL circbuf->buf
+  cb = circbuf_initialize(0);
+	if(circbuf_destroy(cb) == -1);
+	else fail == 3;
 
 
 	#ifdef LOG
