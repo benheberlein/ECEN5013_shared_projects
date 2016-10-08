@@ -69,4 +69,17 @@ uint32_t big_to_little(uint32_t data);
 ****************************************************************************/
 uint32_t little_to_big(uint32_t data);
 
+/****************************************************************************
+*ftoa         : void ftoa(float value, uint8_t *ascii);
+*   returns   : void
+*   value     : float value to be transformed to ascii
+*   ascii     : array with ascii values of value
+*Created by   : Jeff Venicx
+*Date         : 10-5-16
+*Description  : convert a float into a array of ascii
+****************************************************************************/
+
+void ftoa(float value, uint8_t *ascii);
+
+
 #endif
