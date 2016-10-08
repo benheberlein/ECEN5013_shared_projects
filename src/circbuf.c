@@ -12,17 +12,18 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "circbuf.h"
 
 /***********************************************************
-* buffer_full       : uint8_t buffer_full(circbuf_t *circular_buffer);
-*   returns         : 1 for full, 0 for not full, -1 for error
-    circular_buffer : The circular buffer to be checked
-* Author            : Ben Heberlein
-* Date              : 09/25/2016
-* Description       : Check if circular buffer is full
-***********************************************************/
-uint8_t buffer_full(circbuf_t *circular_buffer) {
+* circbuf_buffer_full : uint8_t circbuf_buffer_full(circbuf_t *circular_buffer);
+*   returns           : 1 for full, 0 for not full, -1 for error
+    circular_buffer   : The circular buffer to be checked
+* Author              : Ben Heberlein
+* Date                : 09/25/2016
+* Description         : Check if circular buffer is full
+************************************************************/
+int8_t circbuf_buffer_full(circbuf_t *circular_buffer) {
     // Check if valid buffer
     if (circular_buffer == NULL) {
         return -1;
@@ -36,14 +37,14 @@ uint8_t buffer_full(circbuf_t *circular_buffer) {
 }
 
 /***********************************************************
-* buffer_empty      : uint8_t buffer_empty(circbuf_t *circular_buffer);
-*   returns         : 1 for empty, 0 for not empty, -1 for error
-*   circular_buffer : The circular buffer to be checked
-* Author            : Ben Heberlein
-* Date              : 09/25/2016
-* Description       : Check if circular buffer is empty
+* circbuf_buffer_empty : uint8_t circbuf_buffer_empty(circbuf_t *circular_buffer);
+*   returns            : 1 for empty, 0 for not empty, -1 for error
+*   circular_buffer    : The circular buffer to be checked
+* Author               : Ben Heberlein
+* Date                 : 09/25/2016
+* Description          : Check if circular buffer is empty
 ***********************************************************/
-uint8_t buffer_empty(circbuf_t *circular_buffer) {
+int8_t circbuf_buffer_empty(circbuf_t *circular_buffer) {
     // Check if valid buffer
     if (circular_buffer == NULL) {
         return -1;
@@ -57,7 +58,7 @@ uint8_t buffer_empty(circbuf_t *circular_buffer) {
 }
 
 /***********************************************************
-* add_item          : uint8_t add_item(uint8_t data, circbuf_t *circular_buffer);
+* circbuf_add_item  : uint8_t circbuf_add_item(uint8_t data, circbuf_t *circular_buffer);
 *   returns         : 0 for success, -1 for failure
 *   data            : The data to be added
 *   circular_buffer : The circular buffer to be added to
@@ -65,7 +66,7 @@ uint8_t buffer_empty(circbuf_t *circular_buffer) {
 * Date              : 09/25/2016
 * Description       : Add an item to the circular buffer
 ***********************************************************/
-uint8_t add_item(uint8_t data, circbuf_t *circular_buffer) {
+int8_t circbuf_add_item(uint8_t data, circbuf_t *circular_buffer) {
     // Check if valid buffer
     if (circular_buffer == NULL) {
         return -1;
@@ -81,7 +82,7 @@ uint8_t add_item(uint8_t data, circbuf_t *circular_buffer) {
 
     // Increment head and check for wrap
     circular_buffer->head++;
-    if ((circular_buffer->head - circular_buffer->buf) > circular_buffer->capacity) {
+    if ((circular_buffer->head - circular_buffer->buf) >= circular_buffer->capacity) {
         circular_buffer->head -= circular_buffer->capacity;
     }
     circular_buffer->size++;
@@ -99,21 +100,21 @@ uint8_t add_item(uint8_t data, circbuf_t *circular_buffer) {
 }
 
 /***********************************************************
-* remove_item       : uint8_t remove_item(circbuf_t *circular_buffer);
-*   returns         : The data if successful, 0 if buffer is empty
-*   circular_buffer : The circular buffer to get data from
-* Author            : Ben Heberlein
-* Date              : 09/25/2016
-* Description       : Remove an item from the circular buffer
+* circbuf_remove_item : uint8_t circbuf_remove_item(circbuf_t *circular_buffer);
+*   returns           : The data if successful, 0 if buffer is empty
+*   circular_buffer   : The circular buffer to get data from
+* Author              : Ben Heberlein
+* Date                : 09/25/2016
+* Description         : Remove an item from the circular buffer
 ***********************************************************/
-uint8_t remove_item(circbuf_t *circular_buffer) {
+uint8_t circbuf_remove_item(circbuf_t *circular_buffer) {
     // Check if valid buffer
     if (circular_buffer == NULL) {
         return 0;
     }
 
     // Check if empty
-    if (circular_buffer->STATUS == FULL) {
+    if (circular_buffer->STATUS == EMPTY) {
         return 0;
     }
 
@@ -122,7 +123,7 @@ uint8_t remove_item(circbuf_t *circular_buffer) {
 
     // Increment tail and check for wrap
     circular_buffer->tail++;
-    if ((circular_buffer->tail - circular_buffer->buf) > circular_buffer->capacity) {
+    if ((circular_buffer->tail - circular_buffer->buf) >= circular_buffer->capacity) {
         circular_buffer->tail -= circular_buffer->capacity;
     }
     circular_buffer->size--;
@@ -135,6 +136,59 @@ uint8_t remove_item(circbuf_t *circular_buffer) {
     }
 
     return ret;
-
 }
 
+/***********************************************************
+* circbuf_initialize : circbuf_t *circbuf_initialize(uint16_t capacity);
+*   returns          : A circular buffer with given capacity if successful
+*                      or NULL pointer if failure
+*   capacity		 : Capacity of the buffer
+* Author             : Ben Heberlein
+* Date               : 10/5/2016
+* Description        : Initialize a new circular buffer
+***********************************************************/
+circbuf_t *circbuf_initialize(uint16_t capacity) {
+	circbuf_t *init = NULL;
+	init = (circbuf_t *) malloc(sizeof(circbuf_t));
+	if (init == NULL) {
+		return NULL;
+	}
+
+	init->buf = NULL;
+	init->buf = (uint8_t *) malloc(sizeof(capacity));
+	if (init->buf == NULL) {
+		free(init);
+		return NULL;
+	}
+
+	init->head = init->buf;
+	init->tail = init->buf;
+	init->capacity = capacity;
+	init->size = 0;
+	init->STATUS = EMPTY;
+
+	return init;
+}
+
+/***********************************************************
+* circbuf_destroy    : uint8_t circbuf_destroy(circbuf_t *circular_buf);
+*   returns          : 0 for successful destroy or -1 for failure
+*   circular_buf     : Circular buffer to destroy
+* Author             : Ben Heberlein
+* Date               : 10/5/2016
+* Description        : Destroy an existing circular buffer
+***********************************************************/
+int8_t circbuf_destroy(circbuf_t *circular_buf) {
+	if (circular_buf == NULL) {
+		return -1;
+	}
+
+	if (circular_buf->buf == NULL) {
+		free(circular_buf);
+		return -1;
+	}
+
+	free(circular_buf->buf);
+	free(circular_buf);
+	return 0;
+}
