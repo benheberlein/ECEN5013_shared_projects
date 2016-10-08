@@ -34,21 +34,23 @@ int main(int argc, const char* argv[]) {
     #endif
 
     #ifdef PROJECT_2
-    #ifdef FRDM
-    init_uart();
-    init_timer();
-	#endif
+        #ifdef FRDM
+        init_uart();
+        init_timer();
+	       #endif
 
-    test_circbuf_all();
-/*
-    while(1) {
-    	__NOP;
-    }
-*/
+        test_circbuf_all();
+
+        #ifdef FRDM
+        while(1) {
+        	__NOP;
+        }
+        #endif
     #endif
 
     return 0;
 }
+
 /*
 void TPM0_IRQHandler(){
 	GPIOB_PTOR |= (1<<18);
