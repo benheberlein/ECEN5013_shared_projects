@@ -12,12 +12,12 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "circbuf.h"
-#include "test_circbuf.h"
 #include "data.h"
 #include "log.h"
 
 
-void test_circbuf_buffer_full() {
+
+static char *test_circbuf_buffer_full() {
 	uint8_t fail = 0;
 	int8_t result = 0;
 
@@ -40,7 +40,6 @@ void test_circbuf_buffer_full() {
 		fail = 3;
 	}
 
-	#ifdef LOG
 	// Log output
 	if (fail == 0) {
 		Log0("TEST PASSED: test_circbuf_full", 30);
@@ -53,17 +52,11 @@ void test_circbuf_buffer_full() {
 		//Log0(temp1, 1);
 		//Log0("TEST FAILED: test_circbuf_full with failure code ", 50);
 	}
-	#else
-	//print output
-	if (fail == 0) {
-		printf("TEST PASSED: test_circbuf_full\n");
-	} else {
-		printf("TEST FAILED: test_circbuf_full: %d\n", fail);
-	}
-	#endif
+
+	return NULL;
 }
 
-void test_circbuf_buffer_empty() {
+static char *test_circbuf_buffer_empty() {
 	uint8_t fail = 0;
 	uint8_t result = 0;
 
@@ -84,7 +77,7 @@ void test_circbuf_buffer_empty() {
 		fail = 3;
 	}
 
-	#ifdef LOG
+
 	// Log output
 	if (fail == 0) {
 		Log0("TEST PASSED: test_circbuf_empty", 31);
@@ -97,17 +90,10 @@ void test_circbuf_buffer_empty() {
 		//Log0(temp1, 1);
 		//Log0("TEST FAILED: test_circbuf_full with failure code ", 50);
 	}
-	#else
-	//print output
-	if (fail == 0) {
-		printf("TEST PASSED: test_circbuf_empty\n");
-	} else {
-		printf("TEST FAILED: test_circbuf_empty: %d\n",fail);
-	}
-	#endif
+	return NULL;
 }
 
-void test_circbuf_add_item() {
+static char *test_circbuf_add_item() {
 	uint8_t fail = 0;
 	int8_t result = 0;
 	uint8_t *h = NULL;
@@ -170,24 +156,16 @@ void test_circbuf_add_item() {
 		fail = 12;
 	}
 
-	#ifdef LOG
 	// Log output
 	if (fail == 0) {
 		Log0("TEST PASSED: test_circbuf_add_item", 34);
 	} else {
 		Log1("TEST FAILED: test_circbuf_add_item", 34, &fail, 1);
 	}
-	#else
-	//print output
-	if (fail == 0) {
-		printf("TEST PASSED: test_circbuf_add_item\n");
-	} else {
-		printf("TEST FAILED: test_circbuf_add_item: %d\n", fail);
-	}
-	#endif
+	return NULL;
 }
 
-void test_circbuf_remove_item() {
+static char *test_circbuf_remove_item() {
 	uint8_t fail = 0;
 	int8_t result = 0;
 	uint8_t *h = NULL;
@@ -251,24 +229,16 @@ void test_circbuf_remove_item() {
 
 	circbuf_destroy(cb);
 
-	#ifdef LOG
 	// Log output
 	if (fail == 0) {
 		Log0("TEST PASSED: test_circbuf_remove_item", 37);
 	} else {
 		Log1("TEST FAILED: test_circbuf_remove_item", 37, &fail, 1);
 	}
-	#else
-	// print output
-	if (fail == 0) {
-		printf("TEST PASSED: test_circbuf_remove_item\n");
-	} else {
-		printf("TEST FAILED: test_circbuf_remove_item: %d\n", fail);
-	}
-	#endif
+	return NULL;
 }
 
-void test_circbuf_initialize() {
+static char *test_circbuf_initialize() {
 	uint8_t fail = 0;
 
 	circbuf_t *cb1 = NULL;
@@ -289,22 +259,13 @@ void test_circbuf_initialize() {
 	circbuf_destroy(cb1);
 	circbuf_destroy(cb2);
 
-
-	#ifdef LOG
 	// Log output
 	if (fail == 0) {
 		Log0("TEST PASSED: test_circbuf_initialize", 40);
 	} else {
 		Log1("TEST FAILED: test_circbuf_initialize", 40, &fail, 1);
 	}
-	#else
-	// print output
-	if (fail == 0) {
-		printf("TEST PASSED: test_circbuf_initialize\n");
-	} else {
-		printf("TEST FAILED: test_circbuf_initialize: %d\n", fail);
-	}
-	#endif
+	return NULL;
 }
 
 void test_circbuf_destroy() {
@@ -327,29 +288,20 @@ void test_circbuf_destroy() {
 	if(circbuf_destroy(cb) == -1);
 	else fail = 3;
 
-
-	#ifdef LOG
 	// Log output
 	if (fail == 0) {
 		Log0("TEST PASSED: test_circbuf_destroy", 43);
 	} else {
 		Log1("TEST FAILED: test_circbuf_destroy", 43, &fail, 1);
 	}
-	#else
-	// print output
-	if (fail == 0) {
-		printf("TEST PASSED: test_circbuf_destroy\n");
-	} else {
-		printf("TEST FAILED: test_circbuf_destroy: %d\n",fail);
-	}
-	#endif
 }
 
-void test_circbuf_all() {
+char * all_tests_circbuf() {
 	test_circbuf_buffer_full();
 	test_circbuf_buffer_empty();
 	test_circbuf_add_item();
 	test_circbuf_remove_item();
 	test_circbuf_initialize();
 	test_circbuf_destroy();
+	return NULL;
 }

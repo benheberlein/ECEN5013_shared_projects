@@ -14,6 +14,7 @@
 
 
 #include "project1.h"
+#include "log.h"
 
 #ifdef FRDM
 #include "MKL25Z4.h"
@@ -24,8 +25,7 @@
 #define LOG
 #endif
 
-#include "log.h"
-#include "test_circbuf.h"
+
 
 int main(int argc, const char* argv[]) {
 
@@ -38,8 +38,6 @@ int main(int argc, const char* argv[]) {
         init_uart();
         init_timer();
 	       #endif
-
-        test_circbuf_all();
 
         #ifdef FRDM
         while(1) {
