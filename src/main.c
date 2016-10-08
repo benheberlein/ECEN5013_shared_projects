@@ -17,6 +17,7 @@
 
 #include "log.h"
 #include "test_circbuf.h"
+#include "profiler.h"
 
 int main(int argc, const char* argv[]) {
 
@@ -30,7 +31,14 @@ int main(int argc, const char* argv[]) {
     init_timer();
 	#endif
 
+	#ifdef UNIT_TESTS
     test_circbuf_all();
+	#endif
+
+	#ifdef BENCHMARK
+    profile_all();
+	#endif
+
 
     while(1) {
     	__NOP;

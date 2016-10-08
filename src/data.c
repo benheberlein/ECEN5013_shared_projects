@@ -173,7 +173,6 @@ void ftoa(float value, uint8_t *ascii){
   }
   float fraction = value - (float)interger;
   fraction = fraction * 1000 * multiplier;
-  //printf("fraction part*1000: %f\n", fraction);
 
   my_itoa(ascii, interger, 10);
   int i = strlen(ascii);
@@ -183,11 +182,4 @@ void ftoa(float value, uint8_t *ascii){
   fraction = (int)fraction;
   my_itoa(&ascii[i],fraction, 10);
 
-  /*
-  printf("ascii buffer values:\n");
-  for (int i=0; i < 32; i++){
-    printf("%u ", ascii[i]);
-  }
-  printf("\n");
-*/
 }
