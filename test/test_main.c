@@ -20,6 +20,7 @@ int tests_run = 0;
 char *all_tests() {
     mu_run_test_all(all_tests_data);
     mu_run_test_all(all_tests_memory);
+    //TODO proper circbuf test integration
     all_tests_circbuf();
     //...
     return NULL;
