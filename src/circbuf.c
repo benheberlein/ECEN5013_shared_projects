@@ -129,7 +129,7 @@ uint8_t circbuf_remove_item(circbuf_t *circular_buffer) {
     circular_buffer->size--;
 
     // Set new state
-    if (circular_buffer->size == 0 || circular_buffer->head == circular_buffer->tail+1) {
+    if (circular_buffer->size == 0 || circular_buffer->head == circular_buffer->tail) {
         circular_buffer->STATUS = EMPTY;
     } else {
         circular_buffer->STATUS = PARTIAL;
@@ -148,7 +148,11 @@ uint8_t circbuf_remove_item(circbuf_t *circular_buffer) {
 * Description        : Initialize a new circular buffer
 ***********************************************************/
 circbuf_t *circbuf_initialize(uint16_t capacity) {
-	circbuf_t *init = NULL;
+
+  //check zero case
+  if(capacity == 0)return NULL;
+
+  circbuf_t *init = NULL;
 	init = (circbuf_t *) malloc(sizeof(circbuf_t));
 	if (init == NULL) {
 		return NULL;

@@ -58,7 +58,7 @@ void test_circbuf_buffer_full() {
 	if (fail == 0) {
 		printf("TEST PASSED: test_circbuf_full\n");
 	} else {
-		printf("TEST FAILED: test_circbuf_full\n");
+		printf("TEST FAILED: test_circbuf_full: %d\n", fail);
 	}
 	#endif
 }
@@ -102,7 +102,7 @@ void test_circbuf_buffer_empty() {
 	if (fail == 0) {
 		printf("TEST PASSED: test_circbuf_empty\n");
 	} else {
-		printf("TEST FAILED: test_circbuf_empty\n");
+		printf("TEST FAILED: test_circbuf_empty: %d\n",fail);
 	}
 	#endif
 }
@@ -182,7 +182,7 @@ void test_circbuf_add_item() {
 	if (fail == 0) {
 		printf("TEST PASSED: test_circbuf_add_item\n");
 	} else {
-		printf("TEST FAILED: test_circbuf_add_item\n");
+		printf("TEST FAILED: test_circbuf_add_item: %d\n", fail);
 	}
 	#endif
 }
@@ -235,17 +235,21 @@ void test_circbuf_remove_item() {
 		fail = 8;
 	}
 
+
 	// Check tail rollover
 	circbuf_remove_item(cb);
 	circbuf_add_item(100, cb);
 	circbuf_remove_item(cb);
+
 	if (cb->buf != cb->tail) {
 		fail = 9;
 	}
 
-	if (circbuf_remove_item(cb) != 53) {
+	if (circbuf_remove_item(cb) != 100) {
 		fail = 11;
 	}
+
+	circbuf_destroy(cb);
 
 	#ifdef LOG
 	// Log output
@@ -259,7 +263,7 @@ void test_circbuf_remove_item() {
 	if (fail == 0) {
 		printf("TEST PASSED: test_circbuf_remove_item\n");
 	} else {
-		printf("TEST FAILED: test_circbuf_remove_item\n");
+		printf("TEST FAILED: test_circbuf_remove_item: %d\n", fail);
 	}
 	#endif
 }
@@ -269,31 +273,22 @@ void test_circbuf_initialize() {
 
 	circbuf_t *cb1 = NULL;
 	circbuf_t *cb2 = NULL;
-	circbuf_t *cb3 = NULL;
-	circbuf_t *cb4 = NULL;
-
 
 
 	//test zero sized buffer
 	cb1 = circbuf_initialize(0);
 	if(cb1 == NULL);
-	else fail == 1;
-
-	//negative circbuff
-	cb2 = circbuf_initialize(-10);
-	if(cb2 == NULL);
-	else fail == 2;
+	else fail = 1;
 
 	//check edge case
-	cb3 = circbuf_initialize(65535);
-	if(cb3 != NULL && (cb3->head == cb3->tail));
-	else fail == 1;
+	cb2 = circbuf_initialize(65535);
+	if(cb2 != NULL && (cb2->head == cb2->tail));
+	else fail = 2;
 
 	//destroy test buffers
 	circbuf_destroy(cb1);
 	circbuf_destroy(cb2);
-	circbuf_destroy(cb3);
-	circbuf_destroy(cb4);
+
 
 	#ifdef LOG
 	// Log output
@@ -307,7 +302,7 @@ void test_circbuf_initialize() {
 	if (fail == 0) {
 		printf("TEST PASSED: test_circbuf_initialize\n");
 	} else {
-		printf("TEST FAILED: test_circbuf_initialize\n");
+		printf("TEST FAILED: test_circbuf_initialize: %d\n", fail);
 	}
 	#endif
 }
@@ -320,17 +315,17 @@ void test_circbuf_destroy() {
 
 	//destroy NULL pointer
 	if(circbuf_destroy(cb) == -1);
-	else fail == 1;
+	else fail = 1;
 
 	//destroy a circbuf
 	cb = circbuf_initialize(10);
 	if(circbuf_destroy(cb) == 0);
-	else fail == 2;
+	else fail = 2;
 
 	//NULL circbuf->buf
   cb = circbuf_initialize(0);
 	if(circbuf_destroy(cb) == -1);
-	else fail == 3;
+	else fail = 3;
 
 
 	#ifdef LOG
@@ -345,7 +340,7 @@ void test_circbuf_destroy() {
 	if (fail == 0) {
 		printf("TEST PASSED: test_circbuf_destroy\n");
 	} else {
-		printf("TEST FAILED: test_circbuf_destroy\n");
+		printf("TEST FAILED: test_circbuf_destroy: %d\n",fail);
 	}
 	#endif
 }
