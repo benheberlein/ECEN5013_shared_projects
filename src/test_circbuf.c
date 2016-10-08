@@ -16,16 +16,17 @@
 #include "data.h"
 #include "log.h"
 
+
 void test_circbuf_buffer_full() {
 	uint8_t fail = 0;
 	int8_t result = 0;
-	
+
 	// Check null circular buffer error
 	if (circbuf_buffer_full(NULL) != -1) {
 		fail = 1;
 	}
 	circbuf_t *cb = circbuf_initialize(3);
-	
+
 	// Check not full
 	if (circbuf_buffer_full(cb) != 0) {
 		fail = 2;
@@ -33,12 +34,13 @@ void test_circbuf_buffer_full() {
 	for (int i = 0; i < 3; i++) {
 		result = circbuf_add_item(i, cb);
 	}
-	
+
 	// Check full
 	if (circbuf_buffer_full(cb) != 1) {
 		fail = 3;
 	}
-	
+
+	#ifdef LOG
 	// Log output
 	if (fail == 0) {
 		Log0("TEST PASSED: test_circbuf_full", 30);
@@ -51,30 +53,38 @@ void test_circbuf_buffer_full() {
 		//Log0(temp1, 1);
 		//Log0("TEST FAILED: test_circbuf_full with failure code ", 50);
 	}
-	
+	#else
+	//print output
+	if (fail == 0) {
+		printf("TEST PASSED: test_circbuf_full\n");
+	} else {
+		printf("TEST FAILED: test_circbuf_full\n");
+	}
+	#endif
 }
 
 void test_circbuf_buffer_empty() {
 	uint8_t fail = 0;
 	uint8_t result = 0;
-	
+
 	// Check null circular buffer error
 	if (circbuf_buffer_empty(NULL) != -1) {
 		fail = 1;
 	}
 	circbuf_t *cb = circbuf_initialize(3);
-	
+
 	// Check not full
 	if (circbuf_buffer_empty(cb) != 1) {
 		fail = 2;
 	}
 	result = circbuf_add_item(53, cb);
-	
+
 	// Check full
 	if (circbuf_buffer_empty(cb) != 0) {
 		fail = 3;
 	}
-	
+
+	#ifdef LOG
 	// Log output
 	if (fail == 0) {
 		Log0("TEST PASSED: test_circbuf_empty", 31);
@@ -87,7 +97,14 @@ void test_circbuf_buffer_empty() {
 		//Log0(temp1, 1);
 		//Log0("TEST FAILED: test_circbuf_full with failure code ", 50);
 	}
-
+	#else
+	//print output
+	if (fail == 0) {
+		printf("TEST PASSED: test_circbuf_empty\n");
+	} else {
+		printf("TEST FAILED: test_circbuf_empty\n");
+	}
+	#endif
 }
 
 void test_circbuf_add_item() {
@@ -96,7 +113,7 @@ void test_circbuf_add_item() {
 	uint8_t *h = NULL;
 	uint8_t *t = NULL;
 	uint8_t *buf = NULL;
-	
+
 	// Check null circular buffer error
 	if (circbuf_add_item(53, NULL) != -1) {
 		fail = 1;
@@ -113,11 +130,11 @@ void test_circbuf_add_item() {
 	if (cb->head == h) {
 		fail = 3;
 	}
-	
+
 	if (cb->tail != t) {
 		fail = 4;
 	}
-	
+
 	if (cb->buf != buf) {
 		fail = 5;
 	}
@@ -125,18 +142,18 @@ void test_circbuf_add_item() {
 	if (*(cb->buf) != 53) {
 		fail = 6;
 	}
-	
+
 	if (cb->STATUS != PARTIAL) {
 		fail = 7;
 	}
-	
+
 	if (cb->size != 1) {
 		fail = 8;
 	}
 
 	circbuf_add_item(52, cb);
 	circbuf_add_item(51, cb);
-	
+
 	if (cb->STATUS != FULL) {
 		fail = 9;
 	}
@@ -144,21 +161,30 @@ void test_circbuf_add_item() {
 	if (circbuf_add_item(100, cb) !=  -1) {
 		fail = 10;
 	}
-	
+
 	if (circbuf_remove_item(cb) != 53) {
 		fail = 11;
 	}
-	
+
 	if (cb->head != cb->buf) {
 		fail = 12;
 	}
 
+	#ifdef LOG
 	// Log output
 	if (fail == 0) {
 		Log0("TEST PASSED: test_circbuf_add_item", 34);
 	} else {
 		Log1("TEST FAILED: test_circbuf_add_item", 34, &fail, 1);
 	}
+	#else
+	//print output
+	if (fail == 0) {
+		printf("TEST PASSED: test_circbuf_add_item\n");
+	} else {
+		printf("TEST FAILED: test_circbuf_add_item\n");
+	}
+	#endif
 }
 
 void test_circbuf_remove_item() {
@@ -167,7 +193,7 @@ void test_circbuf_remove_item() {
 	uint8_t *h = NULL;
 	uint8_t *t = NULL;
 	uint8_t *buf = NULL;
-	
+
 	// Check null circular buffer error
 	if (circbuf_remove_item(NULL) != 0) {
 		fail = 1;
@@ -177,38 +203,38 @@ void test_circbuf_remove_item() {
 	if (circbuf_remove_item(cb) != 0) {
 		fail = 2;
 	}
-	
+
 	circbuf_add_item(53, cb);
 	circbuf_add_item(52, cb);
 	circbuf_add_item(51, cb);
 
 	h = cb->head;
 	t = cb->tail;
-	buf = cb->buf;	
+	buf = cb->buf;
 	if (circbuf_remove_item(cb) != 53) {
 		fail = 3;
 	}
-	
+
 	if (cb->head != h) {
 		fail = 4;
 	}
-	
+
 	if (cb->tail == t) {
 		fail = 5;
 	}
-	
+
 	if (cb->buf != buf) {
 		fail = 6;
 	}
-	
+
 	if (cb->STATUS != PARTIAL) {
 		fail = 7;
 	}
-	
+
 	if (cb->size != 2) {
 		fail = 8;
 	}
-#if 0
+
 	// Check tail rollover
 	circbuf_remove_item(cb);
 	circbuf_add_item(100, cb);
@@ -216,27 +242,100 @@ void test_circbuf_remove_item() {
 	if (cb->buf != cb->tail) {
 		fail = 9;
 	}
-	
+
 	if (circbuf_remove_item(cb) != 53) {
 		fail = 11;
 	}
-	
+
+	#ifdef LOG
 	// Log output
 	if (fail == 0) {
 		Log0("TEST PASSED: test_circbuf_remove_item", 37);
 	} else {
 		Log1("TEST FAILED: test_circbuf_remove_item", 37, &fail, 1);
 	}
-
-#endif
+	#else
+	// print output
+	if (fail == 0) {
+		printf("TEST PASSED: test_circbuf_remove_item\n");
+	} else {
+		printf("TEST FAILED: test_circbuf_remove_item\n");
+	}
+	#endif
 }
 
 void test_circbuf_initialize() {
+	uint8_t fail = 0;
 
+	circbuf_t *cb1 = NULL;
+	circbuf_t *cb2 = NULL;
+	circbuf_t *cb3 = NULL;
+	circbuf_t *cb4 = NULL;
+
+
+
+	//test zero sized buffer
+	cb1 = circbuf_initialize(0);
+	if(cb1 == NULL);
+	else fail == 1;
+
+	//negative circbuff
+	cb2 = circbuf_initialize(-10);
+	if(cb2 == NULL);
+	else fail == 2;
+
+	//check edge case
+	cb3 = circbuf_initialize(65535);
+	if(cb3 != NULL && (cb3->head == cb3->tail));
+	else fail == 1;
+
+	//destroy test buffers
+	circbuf_destroy(cb1);
+	circbuf_destroy(cb2);
+	circbuf_destroy(cb3);
+	circbuf_destroy(cb4);
+
+	#ifdef LOG
+	// Log output
+	if (fail == 0) {
+		Log0("TEST PASSED: test_circbuf_initialize", 40);
+	} else {
+		Log1("TEST FAILED: test_circbuf_initialize", 40, &fail, 1);
+	}
+	#else
+	// print output
+	if (fail == 0) {
+		printf("TEST PASSED: test_circbuf_initialize\n");
+	} else {
+		printf("TEST FAILED: test_circbuf_initialize\n");
+	}
+	#endif
 }
 
 void test_circbuf_destroy() {
 
+	uint8_t fail = 0;
+
+	circbuf_t cb = NULL;
+
+	
+
+
+	#ifdef LOG
+	// Log output
+	if (fail == 0) {
+		Log0("TEST PASSED: test_circbuf_destroy", 43);
+	} else {
+		Log1("TEST FAILED: test_circbuf_destroy", 43, &fail, 1);
+	}
+	#else
+	// print output
+	if (fail == 0) {
+		printf("TEST PASSED: test_circbuf_destroy\n");
+	} else {
+		printf("TEST FAILED: test_circbuf_destroy\n");
+	}
+	#endif
 }
 
 void test_circbuf_all() {
@@ -244,5 +343,6 @@ void test_circbuf_all() {
 	test_circbuf_buffer_empty();
 	test_circbuf_add_item();
 	test_circbuf_remove_item();
+	test_circbuf_initialize();
+	test_circbuf_destroy();
 }
-
