@@ -12,12 +12,12 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "circbuf.h"
+#include "test_circbuf.h"
 #include "data.h"
 #include "log.h"
 
 
-
-static char *test_circbuf_buffer_full() {
+void test_circbuf_buffer_full() {
 	uint8_t fail = 0;
 	int8_t result = 0;
 
@@ -45,18 +45,10 @@ static char *test_circbuf_buffer_full() {
 		Log0("TEST PASSED: test_circbuf_full", 30);
 	} else {
 		Log1("TEST FAILED: test_circbuf_full", 30, &fail, 1);
-		//static uint8_t *temp1 = "TEST FAILED: test_circbuf_full with failure code _";
-		//uint8_t *temp2 = NULL;
-		//temp2 = my_itoa(temp2, fail, 10);
-		//*(temp1) = *temp2;
-		//Log0(temp1, 1);
-		//Log0("TEST FAILED: test_circbuf_full with failure code ", 50);
 	}
-
-	return NULL;
 }
 
-static char *test_circbuf_buffer_empty() {
+void test_circbuf_buffer_empty() {
 	uint8_t fail = 0;
 	uint8_t result = 0;
 
@@ -77,23 +69,15 @@ static char *test_circbuf_buffer_empty() {
 		fail = 3;
 	}
 
-
 	// Log output
 	if (fail == 0) {
 		Log0("TEST PASSED: test_circbuf_empty", 31);
 	} else {
 		Log1("TEST FAILED: test_circbuf_empty", 31, &fail, 1);
-		//static uint8_t *temp1 = "TEST FAILED: test_circbuf_full with failure code _";
-		//uint8_t *temp2 = NULL;
-		//temp2 = my_itoa(temp2, fail, 10);
-		//*(temp1) = *temp2;
-		//Log0(temp1, 1);
-		//Log0("TEST FAILED: test_circbuf_full with failure code ", 50);
 	}
-	return NULL;
 }
 
-static char *test_circbuf_add_item() {
+void test_circbuf_add_item() {
 	uint8_t fail = 0;
 	int8_t result = 0;
 	uint8_t *h = NULL;
@@ -156,16 +140,16 @@ static char *test_circbuf_add_item() {
 		fail = 12;
 	}
 
+
 	// Log output
 	if (fail == 0) {
 		Log0("TEST PASSED: test_circbuf_add_item", 34);
 	} else {
 		Log1("TEST FAILED: test_circbuf_add_item", 34, &fail, 1);
 	}
-	return NULL;
 }
 
-static char *test_circbuf_remove_item() {
+void test_circbuf_remove_item() {
 	uint8_t fail = 0;
 	int8_t result = 0;
 	uint8_t *h = NULL;
@@ -235,10 +219,9 @@ static char *test_circbuf_remove_item() {
 	} else {
 		Log1("TEST FAILED: test_circbuf_remove_item", 37, &fail, 1);
 	}
-	return NULL;
 }
 
-static char *test_circbuf_initialize() {
+void test_circbuf_initialize() {
 	uint8_t fail = 0;
 
 	circbuf_t *cb1 = NULL;
@@ -259,13 +242,14 @@ static char *test_circbuf_initialize() {
 	circbuf_destroy(cb1);
 	circbuf_destroy(cb2);
 
+
+
 	// Log output
 	if (fail == 0) {
-		Log0("TEST PASSED: test_circbuf_initialize", 40);
+		Log0("TEST PASSED: test_circbuf_initialize", 36);
 	} else {
-		Log1("TEST FAILED: test_circbuf_initialize", 40, &fail, 1);
+		Log1("TEST FAILED: test_circbuf_initialize", 36, &fail, 1);
 	}
-	return NULL;
 }
 
 void test_circbuf_destroy() {
@@ -284,24 +268,23 @@ void test_circbuf_destroy() {
 	else fail = 2;
 
 	//NULL circbuf->buf
-  cb = circbuf_initialize(0);
+	cb = circbuf_initialize(0);
 	if(circbuf_destroy(cb) == -1);
 	else fail = 3;
 
 	// Log output
 	if (fail == 0) {
-		Log0("TEST PASSED: test_circbuf_destroy", 43);
+		Log0("TEST PASSED: test_circbuf_destroy", 33);
 	} else {
-		Log1("TEST FAILED: test_circbuf_destroy", 43, &fail, 1);
+		Log1("TEST FAILED: test_circbuf_destroy", 33, &fail, 1);
 	}
 }
 
-char * all_tests_circbuf() {
+void test_circbuf_all() {
 	test_circbuf_buffer_full();
 	test_circbuf_buffer_empty();
 	test_circbuf_add_item();
 	test_circbuf_remove_item();
 	test_circbuf_initialize();
 	test_circbuf_destroy();
-	return NULL;
 }
