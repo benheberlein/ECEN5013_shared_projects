@@ -11,13 +11,17 @@
 ***********************************************************/
 #include "MKL25Z4.h"
 #include <stdint.h>
+#include <stdlib.h>
 #include "log.h"
 #include "timer.h"
+#include "circbuf.h"
 
 #define BAUD_RATE 	57600
 #define OVERSAMPLE 	16
+#define CB_BUFFER_CAP 255
 
-uint8_t echo = 0;
+circbuf_t *tx_cb;
+circbuf_t *rx_cb;
 
 uint8_t init_uart() {
 	// Enable port A
@@ -47,14 +51,27 @@ uint8_t init_uart() {
 	// Enable Rx interrupt
     UART0_C2 |= UART0_C2_RIE_MASK;
     NVIC_EnableIRQ(UART0_IRQn);
+
+    // Initialize Rx and Tx circular buffers
+    tx_cb = circbuf_initialize(CB_BUFFER_CAP);
+    rx_cb = circbuf_initialize(CB_BUFFER_CAP);
+}
+
+uint8_t tx_buf() {
+	// There is room in the tx register
+	// while(!(UART0_S1_REG(UART0_BASE_PTR) & UART0_S1_TDRE_MASK)){};
+	while(!(UART0_S1_REG(UART0_BASE_PTR) & UART0_S1_TDRE_MASK)){};
+		// Check if there is tx data
+		if (!circbuf_buffer_empty(tx_cb)) {
+			// Write the character to the data register
+			UART0_D_REG(UART0_BASE_PTR) = circbuf_remove_item(tx_cb);
+		}
+
 }
 
 uint8_t tx_char(uint8_t ch) {
-	// There is room in the tx register
-	while(!(UART0_S1_REG(UART0_BASE_PTR) & UART0_S1_TDRE_MASK)){};
-
-	// Write the character to the data register
-	UART0_D_REG(UART0_BASE_PTR) = ch;
+	// Add ch to buffer
+	circbuf_add_item(ch, tx_cb);
 }
 
 uint8_t tx_string(uint8_t *str, int32_t length) {
@@ -64,67 +81,23 @@ uint8_t tx_string(uint8_t *str, int32_t length) {
 	}
 }
 
+// Wrapper function to see if there is valid Rx data
+int8_t rx_valid() {
+	return (circbuf_buffer_empty(rx_cb) == 0);
+}
+
+// Wrapper function to read byte
+uint8_t rx_char() {
+	if (circbuf_buffer_empty(rx_cb)) {
+		return 0;
+	} else {
+		return circbuf_remove_item(rx_cb);
+	}
+}
+
 void UART0_IRQHandler (void) {
-	uint8_t ch = 0;
 	// Check for Rx character
 	if (UART0_S1 & UART_S1_RDRF_MASK) {
-		ch = UART0_D;
-	} else {
-		return;
+		circbuf_add_item(UART0_D, rx_cb);
 	}
-
-	if (ch == 'e' || ch == 'E') {
-		// Toggle echo mode
-		echo = !echo;
-		if (echo) {
-			tx_string("Entered echo mode.", 18);
-			tx_char('\r');
-		} else {
-			tx_string("Exited echo mode.", 17);
-			tx_char('\r');
-		}
-		return;
-	}
-
-	if (echo) {
-		tx_char(ch);
-		return;
-	}
-
-	switch (ch) {
-	case ('z'):
-		change_duty(-5);
-		break;
-	case ('Z'):
-		change_duty(-5);
-		break;
-	case ('x'):
-		change_duty(5);
-		break;
-	case ('X'):
-		change_duty(5);
-		break;
-	case ('r'):
-		toggle_led(RED);
-		break;
-	case ('b'):
-		toggle_led(BLUE);
-		break;
-	case ('g'):
-		toggle_led(GREEN);
-		break;
-	case ('R'):
-		toggle_led(RED);
-		break;
-	case ('B'):
-		toggle_led(BLUE);
-		break;
-	case ('G'):
-		toggle_led(GREEN);
-		break;
-
-	default:
-		__NOP;
-
-  }
 }

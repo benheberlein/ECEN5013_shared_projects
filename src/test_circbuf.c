@@ -234,15 +234,13 @@ void test_circbuf_initialize() {
 	else fail = 1;
 
 	//check edge case
-	cb2 = circbuf_initialize(65535);
+	cb2 = circbuf_initialize(255);
 	if(cb2 != NULL && (cb2->head == cb2->tail));
 	else fail = 2;
 
 	//destroy test buffers
 	circbuf_destroy(cb1);
 	circbuf_destroy(cb2);
-
-
 
 	// Log output
 	if (fail == 0) {

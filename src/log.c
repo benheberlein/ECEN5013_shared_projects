@@ -40,14 +40,15 @@ void Log1(uint8_t *data, int32_t length, uint8_t *param, int32_t param_size) {
 #ifdef FRDM
 	// use UART if we are on the Freedom Freescale board
 	tx_string(data, length);
-	tx_string(" -- sent with payload: ", 23);
+	tx_string(" -- sent with payload:", 22);
 	while (param_size > 0) {
 		int32_t to_print = *param++;
-		int8_t *src;
+		uint8_t src[10] = "0000000000";
 
+		tx_char(' ');
 		tx_string("0x",2);
 		tx_string(my_itoa(src, to_print, 16), 2);
-		tx_char(' ');
+
 		param_size--;
 	}
 	tx_char('\r');

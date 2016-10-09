@@ -90,7 +90,6 @@ int8_t circbuf_add_item(uint8_t data, circbuf_t *circular_buffer) {
     // Set new state
     if (circular_buffer->size == circular_buffer->capacity ||
         circular_buffer->head == circular_buffer->tail) {
-
         circular_buffer->STATUS = FULL;
     } else {
         circular_buffer->STATUS = PARTIAL;
@@ -129,7 +128,7 @@ uint8_t circbuf_remove_item(circbuf_t *circular_buffer) {
     circular_buffer->size--;
 
     // Set new state
-    if (circular_buffer->size == 0 || circular_buffer->head == circular_buffer->tail) {
+    if (circular_buffer->size == 0) {// || circular_buffer->head == circular_buffer->tail) {
         circular_buffer->STATUS = EMPTY;
     } else {
         circular_buffer->STATUS = PARTIAL;
@@ -159,7 +158,7 @@ circbuf_t *circbuf_initialize(uint16_t capacity) {
 	}
 
 	init->buf = NULL;
-	init->buf = (uint8_t *) malloc(sizeof(capacity));
+	init->buf = (uint8_t *) malloc(capacity);
 	if (init->buf == NULL) {
 		free(init);
 		return NULL;
