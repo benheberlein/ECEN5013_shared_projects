@@ -60,18 +60,19 @@ uint8_t init_uart() {
 uint8_t tx_buf() {
 	// There is room in the tx register
 	// while(!(UART0_S1_REG(UART0_BASE_PTR) & UART0_S1_TDRE_MASK)){};
-	while(!(UART0_S1_REG(UART0_BASE_PTR) & UART0_S1_TDRE_MASK)){};
+	if((UART0_S1_REG(UART0_BASE_PTR) & UART0_S1_TDRE_MASK)) {
 		// Check if there is tx data
 		if (!circbuf_buffer_empty(tx_cb)) {
 			// Write the character to the data register
 			UART0_D_REG(UART0_BASE_PTR) = circbuf_remove_item(tx_cb);
 		}
-
+	}
 }
 
 uint8_t tx_char(uint8_t ch) {
 	// Add ch to buffer
 	circbuf_add_item(ch, tx_cb);
+	tx_buf();
 }
 
 uint8_t tx_string(uint8_t *str, int32_t length) {

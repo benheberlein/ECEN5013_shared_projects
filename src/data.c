@@ -27,7 +27,7 @@
 *Description : takes a interger and converts it into ASCII string
 *Notes       : Only works with base 10 or lower
 ****************************************************************************/
-int8_t *my_itoa(int8_t *str, int32_t data, int32_t base) {
+uint8_t *my_itoa(uint8_t *str, int32_t data, int32_t base) {
 
     //functional iterator variable
     int i = 0;
@@ -40,9 +40,9 @@ int8_t *my_itoa(int8_t *str, int32_t data, int32_t base) {
     }
     //add digits to ASCII string
     while(data != 0){
-        str[i] = data % base + '0';
+        str[i] = (uint8_t) (data % base + '0');
         if (str[i] >= 10 + '0') {
-            str[i] = str[i] + 7;
+             str[i] = str[i] + 7;
         }
         i++;
         data = data/base;
@@ -161,7 +161,7 @@ uint32_t little_to_big(uint32_t data) {
 *Description  : convert a float into a array of ascii
 ****************************************************************************/
 
-void ftoa(float value, uint8_t *ascii){
+void my_ftoa(float value, uint8_t *ascii){
   //extract interger
   int interger = (int)value;
   //printf("interger part: %d\n", interger);
@@ -183,3 +183,14 @@ void ftoa(float value, uint8_t *ascii){
   my_itoa(&ascii[i],fraction, 10);
 
 }
+
+void concat_strings(uint8_t *out_buf, uint8_t *a, uint8_t *b, uint8_t a_size, uint8_t b_size) {
+	uint8_t i = 0;
+	for (i = 0; i < a_size; i++) {
+		*(out_buf+i) = *(a+i);
+	}
+	for (i = 0; i < b_size; i++) {
+		*(out_buf+a_size+i) = *(b+i);
+	}
+}
+

@@ -24,9 +24,42 @@
 
 #define ECHO_BUF_CAP 128
 
+#ifdef PROJECT_2
 int8_t logging_demo() {
-	Log0("a",1);
+	uint8_t buf[128];
+	uint8_t int_buf[10];
+
+	uint8_t *str;
+	uint8_t length = 0;
+
+	str = (uint8_t *) "Testing123, Serial Print Test, no params";
+	length = 40;
+	Log0(str, length);
+
+	str = (uint8_t *) "This is an integer number: ";
+	my_itoa(int_buf, 200, 10);
+	concat_strings(buf, str, int_buf, 27, 3);
+	length = 30;
+	Log0(buf, length);
+
+	my_itoa(int_buf, 4096, 10);
+	concat_strings(buf, str, int_buf, 27, 4);
+	length = 31;
+	Log0(buf, length);
+
+	my_itoa(int_buf, 123456, 10);
+	concat_strings(buf, str, int_buf, 27, 6);
+	length = 33;
+	Log0(buf, length);
+
+	str = (uint8_t *) "This is a floating point number: ";
+	my_ftoa(1543.321, int_buf);
+	concat_strings(buf, str, int_buf, 33, 7);
+	length = 40;
+	Log0(buf, length);
+
 }
+#endif
 
 int main(int argc, const char* argv[]) {
 
@@ -46,6 +79,10 @@ int main(int argc, const char* argv[]) {
 
 	#ifdef BENCHMARK
     profile_all();
+	#endif
+
+	#ifdef LOG_DEMO
+    logging_demo();
 	#endif
 
     uint8_t echo = 0;

@@ -16,7 +16,7 @@
 #include "stdint.h"
 
 /****************************************************************************
-*my_itoa     : int8_t *my_itoa(int8_t *str, int32_t data, int32_t base);
+*my_itoa     : uint8_t *my_itoa(uint8_t *str, int32_t data, int32_t base);
 *   returns  : array pointer of trasnformed data
 *   str      : array pointer for transformed data
 *   data     : number to be transformed
@@ -26,7 +26,7 @@
 *Description : takes a interger and converts it into ASCII string
 *Notes       : Only works with base 10 or lower
 ****************************************************************************/
-int8_t *my_itoa(int8_t *str, int32_t data, int32_t base);
+uint8_t *my_itoa(uint8_t *str, int32_t data, int32_t base);
 
 /****************************************************************************
 *my_atoi     : int32_t my_atoi(int8_t *str);
@@ -70,7 +70,7 @@ uint32_t big_to_little(uint32_t data);
 uint32_t little_to_big(uint32_t data);
 
 /****************************************************************************
-*ftoa         : void ftoa(float value, uint8_t *ascii);
+* my_ftoa     : void my_ftoa(float value, uint8_t *ascii);
 *   returns   : void
 *   value     : float value to be transformed to ascii
 *   ascii     : array with ascii values of value
@@ -79,7 +79,8 @@ uint32_t little_to_big(uint32_t data);
 *Description  : convert a float into a array of ascii
 ****************************************************************************/
 
-void ftoa(float value, uint8_t *ascii);
+void my_ftoa(float value, uint8_t *ascii);
 
+void concat_strings(uint8_t *, uint8_t *, uint8_t *, uint8_t, uint8_t);
 
 #endif
