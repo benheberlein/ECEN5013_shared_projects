@@ -68,6 +68,7 @@ int main(int argc, const char* argv[]) {
     #endif
 
     #ifdef PROJECT_2
+
     #ifdef FRDM
     init_uart();
     init_timer();
@@ -85,6 +86,7 @@ int main(int argc, const char* argv[]) {
     logging_demo();
 	#endif
 
+	#ifdef FRDM
     uint8_t echo = 0;
     uint8_t echo_size = 0;
     uint8_t ch = 0;
@@ -163,6 +165,8 @@ int main(int argc, const char* argv[]) {
 
     	tx_buf();
     }
+	#endif
+
 	#endif
 
     return 0;
