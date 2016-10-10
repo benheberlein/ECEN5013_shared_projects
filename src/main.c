@@ -54,8 +54,8 @@ int8_t logging_demo() {
 
 	str = (uint8_t *) "This is a floating point number: ";
 	my_ftoa(1543.321, int_buf);
-	concat_strings(buf, str, int_buf, 33, 7);
-	length = 40;
+	concat_strings(buf, str, int_buf, 33, 8);
+	length = 41;
 	Log0(buf, length);
 
 }

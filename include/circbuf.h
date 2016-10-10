@@ -35,8 +35,8 @@ typedef struct circbuf {
     uint8_t *head;
     uint8_t *tail;
 
-    uint8_t capacity;
-    uint8_t size;
+    uint16_t capacity;
+    uint16_t size;
 
     circbuf_state_t STATUS;
 

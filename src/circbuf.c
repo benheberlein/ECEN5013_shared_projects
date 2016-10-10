@@ -15,6 +15,8 @@
 #include <stdlib.h>
 #include "circbuf.h"
 
+#define MAX_CAP 1024
+
 /***********************************************************
 * circbuf_buffer_full : uint8_t circbuf_buffer_full(circbuf_t *circular_buffer);
 *   returns           : 1 for full, 0 for not full, -1 for error
@@ -150,6 +152,9 @@ circbuf_t *circbuf_initialize(uint16_t capacity) {
 
   //check zero case
   if(capacity == 0)return NULL;
+
+  // check maximum
+  if (capacity > MAX_CAP) return NULL;
 
   circbuf_t *init = NULL;
 	init = (circbuf_t *) malloc(sizeof(circbuf_t));

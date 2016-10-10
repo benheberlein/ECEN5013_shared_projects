@@ -18,14 +18,13 @@
 
 #define BAUD_RATE 	57600
 #define OVERSAMPLE 	16
-#define CB_BUFFER_CAP 255
+#define CB_BUFFER_CAP 512
 
 circbuf_t *tx_cb;
 circbuf_t *rx_cb;
 
 uint8_t init_uart() {
 	// Enable port A
-
 	SIM_SCGC5 |= SIM_SCGC5_PORTA_MASK;
 	// Enable UART Rx on pin PTA1
 	PORTA_PCR1 = PORT_PCR_MUX(0x2);

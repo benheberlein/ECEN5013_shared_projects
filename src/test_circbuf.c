@@ -234,7 +234,7 @@ void test_circbuf_initialize() {
 	else fail = 1;
 
 	//check edge case
-	cb2 = circbuf_initialize(255);
+	cb2 = circbuf_initialize(1024);
 	if(cb2 != NULL && (cb2->head == cb2->tail));
 	else fail = 2;
 
