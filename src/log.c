@@ -18,6 +18,7 @@
 #include <stdio.h>
 #endif
 #include <data.h>
+#define DEBUG
 
 void Log0(uint8_t *data, int32_t length) {
 #ifdef DEBUG
@@ -56,7 +57,6 @@ void Log1(uint8_t *data, int32_t length, uint8_t *param, int32_t param_size) {
 	// else use normal printf
 	while (length > 0) {
 		length--;
-	}
 		printf("%c",*data++);
 	}
 	printf(" -- sent with payload ");

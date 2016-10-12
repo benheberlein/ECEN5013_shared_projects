@@ -16,7 +16,7 @@
 ##########################################################
 # Project version
 # Options are 1, 2, 3, 4
-PROJECT := 1
+PROJECT := 2
 
 # Host architecture
 # Options are HOST, BBB or FRDM
@@ -28,7 +28,7 @@ HOST_ADDR := root@192.168.7.2:
 
 # Debug options
 # Options are TRUE or FALSE
-DEBUG := FALSE
+DEBUG := TRUE
 
 # Compiler warnings
 # Options are TRUE or FALSE
@@ -42,7 +42,7 @@ FLAGS := NONE
 ##########################################################
 # Construct compiler flags
 CFLAGS = -std=c99 -I$(INC_DIR)
-ifeq ($(DEBUG), TRUE) 
+ifeq ($(DEBUG), TRUE)
  CFLAGS += -g -O0
 endif
 ifneq ($(FLAGS), NONE)
@@ -162,7 +162,7 @@ all: build
 $(BIN_DIR)/$(OUTPUT_NAME): $(addprefix $(BUILD_DIR)/, $(OBJS))
 	@$(MKDIR_P) $(BIN_DIR)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
-	$(SIZE) $@ 
+	$(SIZE) $@
 
 # Invoke dump on project output
 .PHONY: dump

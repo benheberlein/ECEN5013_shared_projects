@@ -10,186 +10,305 @@
 *
 ***********************************************************/
 
+#ifdef FRDM
+#include "uart.h"
+#include "MKL25Z4.h"
+#endif
+
 #include "memory.h"
 #include <sys/time.h>
 #include "log.h"
 #include "data.h"
 #include "circbuf.h"
-#include "uart.h"
-#include "MKL25Z4.h"
+#include<time.h>
+
 #include "stdlib.h"
 #include "string.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+
 //binary bits for PRESCALE starting at 000 = 1 ... 111=128
 #define PRESCALE 111
 //decimal translation of PRESCALE
 #define PRESCALE_MULTI 128
 
+void delay(int milliseconds)
+{
+    long pause;
+    clock_t now,then;
+
+    pause = milliseconds*(CLOCKS_PER_SEC/1000);
+    now = then = clock();
+    while( (now-then) < pause )
+        now = clock();
+}
+
+
 void profile_memory(uint32_t length) {
 
-	int message_length;
-	uint16_t cycles_128;
-	//uint32_t length = 16;
-	uint8_t src[length];
-	uint8_t dst[length];
-	int32_t test;
-	uint8_t time_buffer[32];
+		int32_t test;
+		uint8_t time_buffer[32];
+		int message_length;
+		uint16_t cycles_128;
 
+		uint8_t src[length];
+		uint8_t dst[length];
 
-	/*benchmark my_memmove*************************/
-#ifdef FRDM
-	TPM1_CNT = 0;
-	my_memmove(src, dst, length);
-	cycles_128 = (uint16_t)TPM1_CNT;
-	test = (cycles_128*PRESCALE_MULTI);
-	test = test/48;
-	message_length = my_itoa(time_buffer, test, 10);
-#else
-	//add beagle code
-#endif
-	Log3("my_memove time usec:", 20);
-	Log0(time_buffer, message_length);
+		static struct timeval start;
+		static struct timeval stop;
+		struct timeval result;
 
-	/*benchmark memmove*********************/
-#ifdef FRDM
-	TPM1_CNT = 0;
+		/*benchmark my_memmove*************************/
+	#ifdef FRDM
+		TPM1_CNT = 0;
+		my_memmove(src, dst, length);
+		cycles_128 = (uint16_t)TPM1_CNT;
+		test = (cycles_128*PRESCALE_MULTI);
+		test = test/48;
+		message_length = my_itoa(time_buffer, test, 10);
+	#else
+			gettimeofday(&start, NULL);
 
-	memmove(dst, src, length);
+			my_memmove(src, dst, length);
 
-	cycles_128 = (uint16_t)TPM1_CNT;
-	test = (cycles_128*PRESCALE_MULTI);
-	test = test/48;
-	message_length = my_itoa(time_buffer, test, 10);
-#else
-	//add beagle code
-#endif
-	Log3("memmove time usec:", 18);
-	Log0(time_buffer, message_length);
+			gettimeofday(&stop, NULL);
+			profile_convert_time(&result, &stop, &start);
+			message_length = my_itoa(time_buffer, (int32_t)result.tv_usec, 10);
 
-	/*benchmark my_memzero******************/
-#ifdef FRDM
-	TPM1_CNT = 0;
+	#endif
+		Log3("my_memove time usec:", 20);
+		Log0(time_buffer, message_length);
 
-	my_memzero(src, length);
+		//benchmark memmove*********************
+	#ifdef FRDM
+		TPM1_CNT = 0;
 
-	cycles_128 = (uint16_t)TPM1_CNT;
-	test = (cycles_128*PRESCALE_MULTI);
-	test = test/48;
-	message_length = my_itoa(time_buffer, test, 10);
-#else
-	//add beagle code
-#endif
-	Log3("my_memove time usec:", 20);
-	Log0(time_buffer, message_length);
+		memmove(dst, src, length);
 
-	/*benchmark memset for 0 *******************/
-#ifdef FRDM
-	TPM1_CNT = 0;
+		cycles_128 = (uint16_t)TPM1_CNT;
+		test = (cycles_128*PRESCALE_MULTI);
+		test = test/48;
+		message_length = my_itoa(time_buffer, test, 10);
+	#else
 
-	memset(src, 0, length);
+		gettimeofday(&start, NULL);
 
-	cycles_128 = (uint16_t)TPM1_CNT;
-	test = (cycles_128*PRESCALE_MULTI);
-	test = test/48;
-	message_length = my_itoa(time_buffer, test, 10);
-#else
-	//add beagle code
-#endif
-	Log3("memset time usec:", 17);
-	Log0(time_buffer, message_length);
+		memmove(dst, src, length);
 
-	/*benchmark my_reverse********************/
-#ifdef FRDM
-	TPM1_CNT = 0;
+		gettimeofday(&stop, NULL);
+		profile_convert_time(&result, &stop, &start);
+		message_length = my_itoa(time_buffer, (int32_t)result.tv_usec, 10);
 
-	my_reverse(src, length);
+	#endif
+		Log3("memmove time usec:", 18);
+		Log0(time_buffer, message_length);
 
-	cycles_128 = (uint16_t)TPM1_CNT;
-	test = (cycles_128*PRESCALE_MULTI);
-	test = test/48;
-	message_length = my_itoa(time_buffer, test, 10);
-#else
-	//add beagle code
-#endif
-	Log3("my_reverse time usec:", 21);
-	Log0(time_buffer, message_length);
-	
-	// Benchmark reverse but how?
-	// Output all profile data with log.h functions
+		//benchmark my_memzero******************
+	#ifdef FRDM
+		TPM1_CNT = 0;
+
+		my_memzero(src, length);
+
+		cycles_128 = (uint16_t)TPM1_CNT;
+		test = (cycles_128*PRESCALE_MULTI);
+		test = test/48;
+		message_length = my_itoa(time_buffer, test, 10);
+	#else
+
+		gettimeofday(&start, NULL);
+
+		my_memzero(src, length);
+
+		gettimeofday(&stop, NULL);
+		profile_convert_time(&result, &stop, &start);
+		message_length = my_itoa(time_buffer, (int32_t)result.tv_usec, 10);
+
+	#endif
+		Log3("my_memzero time usec:", 21);
+		Log0(time_buffer, message_length);
+
+		//benchmark memset for 0 *******************
+	#ifdef FRDM
+		TPM1_CNT = 0;
+
+		memset(src, 0, length);
+
+		cycles_128 = (uint16_t)TPM1_CNT;
+		test = (cycles_128*PRESCALE_MULTI);
+		test = test/48;
+		message_length = my_itoa(time_buffer, test, 10);
+	#else
+
+		gettimeofday(&start, NULL);
+
+		memset(src, 0, length);
+
+		gettimeofday(&stop, NULL);
+		profile_convert_time(&result, &stop, &start);
+		message_length = my_itoa(time_buffer, (int32_t)result.tv_usec, 10);
+
+	#endif
+		Log3("memset time usec:", 17);
+		Log0(time_buffer, message_length);
+
+		//benchmark my_reverse********************
+	#ifdef FRDM
+		TPM1_CNT = 0;
+
+		my_reverse(src, length);
+
+		cycles_128 = (uint16_t)TPM1_CNT;
+		test = (cycles_128*PRESCALE_MULTI);
+		test = test/48;
+		message_length = my_itoa(time_buffer, test, 10);
+	#else
+
+		gettimeofday(&start, NULL);
+
+		my_reverse(src, length);
+
+		gettimeofday(&stop, NULL);
+		profile_convert_time(&result, &stop, &start);
+		message_length = my_itoa(time_buffer, (int32_t)result.tv_usec, 10);
+
+	#endif
+		Log3("my_reverse time usec:", 21);
+		Log0(time_buffer, message_length);
+
+		// Benchmark reverse but how?
+		// Output all profile data with log.h functions
 }
 
 void profile_data () {
-	int message_length;
-	uint16_t cycles_128;
-	uint32_t length = 16;
-	uint8_t buffer[32];
-	int32_t interger = 12345;
-	int32_t test;
-	uint8_t time_buffer[32];
+		int message_length;
+		uint16_t cycles_128;
+		uint32_t length = 16;
+		uint8_t buffer[32];
+		int32_t interger = 12345;
+		int32_t test;
+		uint8_t time_buffer[32];
 
-	float flt = 123123213121.234;
+		float flt = 123123213121.234;
 
-
-	/*benchmark my_itoa*********************/
-#ifdef FRDM
-	TPM1_CNT = 0;
-
-	my_itoa(buffer, interger, 10);
-
-	cycles_128 = (uint16_t)TPM1_CNT;
-	test = (cycles_128*PRESCALE_MULTI);
-	test = test/48;
-	message_length = my_itoa(time_buffer, test, 10);
-#else
-	//add beagle code
-#endif
-	Log3("my_itoa time usec:", 18);
-	Log0(time_buffer, message_length);
-
-#ifndef FRDM
-	/*benchmark itoa**********************/
-#endif
-
-	/*benchmark my_ftoa**********************/
-#ifdef FRDM
-	TPM1_CNT = 0;
-
-	my_ftoa(flt, buffer);
-
-	cycles_128 = (uint16_t)TPM1_CNT;
-	test = (cycles_128*PRESCALE_MULTI);
-	test = test/48;
-	message_length = my_itoa(time_buffer, test, 10);
-#else
-	//add beagle code
-#endif
-	Log3("my_ftoa time usec:", 18);
-	Log0(time_buffer, message_length);
-
-#ifndef FRDM
-	/*benchmark ftoa**********************/
-#endif
-
-	/*benchmark my_atoi*********************/
-#ifdef FRDM
-	TPM1_CNT = 0;
-
-	interger = my_atoi(buffer);
-
-	cycles_128 = (uint16_t)TPM1_CNT;
-	test = (cycles_128*PRESCALE_MULTI);
-	test = test/48;
-	message_length = my_itoa(time_buffer, test, 10);
-#else
-	//add beagle code
-#endif
-	Log3("my_atoi time usec:", 18);
-	Log0(time_buffer, message_length);
-
-#ifndef FRDM
-	/*benchmark atoi**********************/
-#endif
+		static struct timeval start;
+		static struct timeval stop;
+		struct timeval result;
 
 
+		//benchmark my_itoa*********************
+	#ifdef FRDM
+		TPM1_CNT = 0;
+
+		my_itoa(buffer, interger, 10);
+
+		cycles_128 = (uint16_t)TPM1_CNT;
+		test = (cycles_128*PRESCALE_MULTI);
+		test = test/48;
+		message_length = my_itoa(time_buffer, test, 10);
+	#else
+		gettimeofday(&start, NULL);
+
+		my_itoa(buffer, interger, 10);
+
+		gettimeofday(&stop, NULL);
+		profile_convert_time(&result, &stop, &start);
+		message_length = my_itoa(time_buffer, (int32_t)result.tv_usec, 10);
+
+	#endif
+		Log3("my_itoa time usec:", 18);
+		Log0(time_buffer, message_length);
+
+		//benchmark itoa*********************
+	#ifdef BBB
+		gettimeofday(&start, NULL);
+
+		itoa(interger, buffer, 10);
+
+		gettimeofday(&stop, NULL);
+		profile_convert_time(&result, &stop, &start);
+		message_length = my_itoa(time_buffer, (int32_t)result.tv_usec, 10);
+
+		Log3("itoa time usec:", 15);
+		Log0(time_buffer, message_length);
+
+	#endif
+
+		//benchmark my_ftoa**********************
+	#ifdef FRDM
+		TPM1_CNT = 0;
+
+		my_ftoa(flt, buffer);
+
+		cycles_128 = (uint16_t)TPM1_CNT;
+		test = (cycles_128*PRESCALE_MULTI);
+		test = test/48;
+		message_length = my_itoa(time_buffer, test, 10);
+	#else
+		gettimeofday(&start, NULL);
+
+		my_ftoa(flt, buffer);
+
+		gettimeofday(&stop, NULL);
+		profile_convert_time(&result, &stop, &start);
+		message_length = my_itoa(time_buffer, (int32_t)result.tv_usec, 10);
+
+	#endif
+		Log3("my_ftoa time usec:", 18);
+		Log0(time_buffer, message_length);
+
+		//benchmark ftoa BBB****************************
+	#ifdef BBB
+		gettimeofday(&start, NULL);
+
+		//ftoa(flt, buffer);
+
+		gettimeofday(&stop, NULL);
+		profile_convert_time(&result, &stop, &start);
+		message_length = my_itoa(time_buffer, (int32_t)result.tv_usec, 10);
+
+		Log3("ftoa time usec:", 15);
+		Log0(time_buffer, message_length);
+	#endif
+
+		//benchmark my_atoi*********************
+	#ifdef FRDM
+		TPM1_CNT = 0;
+
+		interger = my_atoi(buffer);
+
+		cycles_128 = (uint16_t)TPM1_CNT;
+		test = (cycles_128*PRESCALE_MULTI);
+		test = test/48;
+		message_length = my_itoa(time_buffer, test, 10);
+	#else
+		gettimeofday(&start, NULL);
+
+		interger = my_atoi(buffer);
+
+		gettimeofday(&stop, NULL);
+		profile_convert_time(&result, &stop, &start);
+		message_length = my_itoa(time_buffer, (int32_t)result.tv_usec, 10);
+
+	#endif
+		Log3("my_atoi time usec:", 18);
+		Log0(time_buffer, message_length);
+
+
+			//benchmark atoi**********************
+	#ifdef BBB
+		gettimeofday(&start, NULL);
+
+		//interger = my_atoi(buffer);
+
+		gettimeofday(&stop, NULL);
+		profile_convert_time(&result, &stop, &start);
+		message_length = my_itoa(time_buffer, (int32_t)result.tv_usec, 10);
+
+		Log3("atoi time usec:", 15);
+		Log0(time_buffer, message_length);
+	#endif
 }
 
 void profile_malloc(uint32_t num_bytes) {
@@ -199,6 +318,9 @@ void profile_malloc(uint32_t num_bytes) {
 	int message_length;
 	uint16_t cycles_128;
 
+	static struct timeval start;
+	static struct timeval stop;
+	struct timeval result;
 
 #ifdef FRDM
 	TPM1_CNT = 0;
@@ -210,12 +332,19 @@ void profile_malloc(uint32_t num_bytes) {
 	test = test/48;
 	message_length = my_itoa(time_buffer, test, 10);
 #else
-	//add beagle code
+	gettimeofday(&start, NULL);
+
+	malloc(num_bytes);
+
+	gettimeofday(&stop, NULL);
+	profile_convert_time(&result, &stop, &start);
+	message_length = my_itoa(time_buffer, (int32_t)result.tv_usec, 10);
+
 #endif
 	Log3("malloc time usec:", 17);
 	Log0(time_buffer, message_length);
 
-	// profile malloc with different data sizes
+
 	// profile free
 }
 
@@ -229,6 +358,9 @@ void profile_circbuf() {
 	circbuf_t *cb;
 	cb = circbuf_initialize(10);
 
+	static struct timeval start;
+	static struct timeval stop;
+	struct timeval result;
 
 	/*benchmark circbuf_add_item*************************/
 #ifdef FRDM
@@ -241,7 +373,13 @@ void profile_circbuf() {
 	test = test/48;
 	message_length = my_itoa(time_buffer, test, 10);
 #else
-	//add beagle code
+	gettimeofday(&start, NULL);
+
+	circbuf_add_item(32, cb);
+
+	gettimeofday(&stop, NULL);
+	profile_convert_time(&result, &stop, &start);
+	message_length = my_itoa(time_buffer, (int32_t)result.tv_usec, 10);
 #endif
 	Log3("add item time usec:", 19);
 	Log0(time_buffer, message_length);
@@ -257,7 +395,13 @@ void profile_circbuf() {
 	test = test/48;
 	message_length = my_itoa(time_buffer, test, 10);
 #else
-	//add beagle code
+	gettimeofday(&start, NULL);
+
+	circbuf_remove_item(cb);
+
+	gettimeofday(&stop, NULL);
+	profile_convert_time(&result, &stop, &start);
+	message_length = my_itoa(time_buffer, (int32_t)result.tv_usec, 10);
 #endif
 	Log3("remove item time usec:", 22);
 	Log0(time_buffer, message_length);
@@ -289,6 +433,7 @@ void profile_log() {
 }
 
 void profile_init(){
+#ifdef FRDM
 	//set clock gate for TPM1
 	SIM_SCGC6 |= SIM_SCGC6_TPM1_MASK;
 
@@ -297,24 +442,52 @@ void profile_init(){
 
 	//set mod number for max
 	TPM_MOD_REG(TPM1) = 65535;
+#endif
 }
 
-uint8_t* profile_convert_time(uint8_t * dst, uint16_t cycles, int ps){
+int profile_convert_time(struct timeval *result, struct timeval *x, struct timeval *y){
 
-	//time = (cycles*ps)/48000;
+	/* Perform the carry for the later subtraction by updating y. */
+   if (x->tv_usec < y->tv_usec) {
+     int nsec = (y->tv_usec - x->tv_usec) / 1000000 + 1;
+     y->tv_usec -= 1000000 * nsec;
+     y->tv_sec += nsec;
+   }
+   if (x->tv_usec - y->tv_usec > 1000000) {
+     int nsec = (x->tv_usec - y->tv_usec) / 1000000;
+     y->tv_usec += 1000000 * nsec;
+     y->tv_sec -= nsec;
+   }
 
+   /* Compute the time remaining to wait.
+      tv_usec is certainly positive. */
+   result->tv_sec = x->tv_sec - y->tv_sec;
+   result->tv_usec = x->tv_usec - y->tv_usec;
+
+   /* Return 1 if result is negative. */
+   return 0;
 }
+
 void profile_all() {
 	profile_init();
 
 	/*
+	Log0("profiler start", 14);
+
 	Log0("10 bytes", 8);
 	profile_memory(10);
+
+	Log0("100 bytes", 8);
+	profile_memory(100);
+
+	Log0("1000 bytes", 9);
+	profile_memory(1000);
+
 	Log0("5000 bytes", 10);
 	profile_memory(5000);
-	*/
+*/
 
-	//profile_data();
+	profile_data();
 
 	/*
 	Log0("malloc 10 bytes", 15);
@@ -332,6 +505,5 @@ void profile_all() {
 
 	//profile_circbuf();
 
-	profile_log();
+	//profile_log();
 }
-

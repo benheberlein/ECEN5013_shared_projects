@@ -13,6 +13,8 @@
 
 // header file for profiler
 
+void delay(int milliseconds);
+
 void profile_memory(uint32_t length);
 
 void profile_data ();
@@ -25,5 +27,6 @@ void profile_log();
 
 void profile_init();
 
-void profile_all();
+int profile_convert_time(struct timeval *result, struct timeval *x, struct timeval *y);
 
+void profile_all();

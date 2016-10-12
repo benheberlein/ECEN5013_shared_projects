@@ -77,7 +77,6 @@ int32_t my_atoi(int8_t *str) {
     if(*str == '-'){
       sign = -1;
       str++;
-      printf("negative\n");
     }
     //convert ASCII to value
     while(*str != '\0'){
@@ -193,4 +192,3 @@ void concat_strings(uint8_t *out_buf, uint8_t *a, uint8_t *b, uint8_t a_size, ui
 		*(out_buf+a_size+i) = *(b+i);
 	}
 }
-
