@@ -17,8 +17,8 @@
 #include <stdio.h>
 
 /****************************************************************************
-*my_itoa  : int8_t *my_itoa(int8_t *str, int32_t data, int32_t base);
-*   returns  : array pointer of trasnformed data
+*my_itoa     : int my_itoa(int8_t *str, int32_t data, int32_t base);
+*   returns  : length of ASCII array
 *   str      : array pointer for transformed data
 *   data     : number to be transformed
 *   base     : base number value
@@ -27,7 +27,7 @@
 *Description : takes a interger and converts it into ASCII string
 *Notes       : Only works with base 10 or lower
 ****************************************************************************/
-uint8_t *my_itoa(uint8_t *str, int32_t data, int32_t base) {
+int my_itoa(uint8_t *str, int32_t data, int32_t base) {
 
     //functional iterator variable
     int i = 0;
@@ -57,7 +57,7 @@ uint8_t *my_itoa(uint8_t *str, int32_t data, int32_t base) {
     //reverse the string
 
     my_reverse(str, i);
-    return str;
+    return i;
 }
 
 /****************************************************************************

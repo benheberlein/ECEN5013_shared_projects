@@ -75,3 +75,18 @@ void Log1(uint8_t *data, int32_t length, uint8_t *param, int32_t param_size) {
 #endif
 #endif
 }
+
+void Log3(uint8_t *data, int32_t length) {
+#ifdef DEBUG
+#ifdef FRDM
+	// use UART if we are on the Freedom Freescale board
+	tx_string(data, length);
+
+#else
+	// else use normal printf
+	for (; length > 0; length--) {
+		printf("%c",*data++);
+	}
+#endif
+#endif
+}

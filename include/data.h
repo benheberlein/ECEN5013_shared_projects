@@ -16,8 +16,8 @@
 #include "stdint.h"
 
 /****************************************************************************
-*my_itoa     : uint8_t *my_itoa(uint8_t *str, int32_t data, int32_t base);
-*   returns  : array pointer of trasnformed data
+*my_itoa     : int my_itoa(uint8_t *str, int32_t data, int32_t base);
+*   returns  : length of ASCII array
 *   str      : array pointer for transformed data
 *   data     : number to be transformed
 *   base     : base number value
@@ -26,7 +26,7 @@
 *Description : takes a interger and converts it into ASCII string
 *Notes       : Only works with base 10 or lower
 ****************************************************************************/
-uint8_t *my_itoa(uint8_t *str, int32_t data, int32_t base);
+int my_itoa(uint8_t *str, int32_t data, int32_t base);
 
 /****************************************************************************
 *my_atoi     : int32_t my_atoi(int8_t *str);
