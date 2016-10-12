@@ -7,7 +7,8 @@ SRCS      = main.c \
             project1.c \
 						circbuf.c \
 						log.c\
-						profiler.c
+						profiler.c \
+						test_circbuf.c
 
 LIBS_SRCS = data.c \
             memory.c \

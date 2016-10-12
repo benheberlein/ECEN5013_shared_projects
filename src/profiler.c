@@ -324,13 +324,14 @@ void profile_malloc(uint32_t num_bytes) {
 
 #ifdef FRDM
 	TPM1_CNT = 0;
-
-	malloc(num_bytes);
+	uint8_t *ptr;
+	ptr = (uint8_t *) malloc(num_bytes);
 
 	cycles_128 = (uint16_t)TPM1_CNT;
 	test = (cycles_128*PRESCALE_MULTI);
 	test = test/48;
 	message_length = my_itoa(time_buffer, test, 10);
+	free(ptr);
 #else
 	gettimeofday(&start, NULL);
 
@@ -345,7 +346,7 @@ void profile_malloc(uint32_t num_bytes) {
 	Log0(time_buffer, message_length);
 
 
-	// profile free
+
 }
 
 void profile_circbuf() {
@@ -471,9 +472,8 @@ int profile_convert_time(struct timeval *result, struct timeval *x, struct timev
 void profile_all() {
 	profile_init();
 
-	/*
 	Log0("profiler start", 14);
-
+/*
 	Log0("10 bytes", 8);
 	profile_memory(10);
 
@@ -485,11 +485,9 @@ void profile_all() {
 
 	Log0("5000 bytes", 10);
 	profile_memory(5000);
-*/
 
 	profile_data();
-
-	/*
+*/
 	Log0("malloc 10 bytes", 15);
 	profile_malloc(10);
 
@@ -501,9 +499,9 @@ void profile_all() {
 
 	Log0("malloc 1000 bytes", 17);
 	profile_malloc(10);
-	 */
 
-	//profile_circbuf();
+	profile_circbuf();
 
-	//profile_log();
+	profile_log();
+
 }

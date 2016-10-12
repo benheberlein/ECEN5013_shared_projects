@@ -18,7 +18,6 @@
 #include <stdio.h>
 #endif
 #include <data.h>
-#define DEBUG
 
 void Log0(uint8_t *data, int32_t length) {
 #ifdef DEBUG
@@ -48,7 +47,8 @@ void Log1(uint8_t *data, int32_t length, uint8_t *param, int32_t param_size) {
 
 		tx_char(' ');
 		tx_string("0x",2);
-		tx_string(my_itoa(src, to_print, 16), 2);
+		my_itoa(src, to_print, 16);
+		tx_string(src, 2);
 
 		param_size--;
 	}

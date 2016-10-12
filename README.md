@@ -4,6 +4,9 @@
 This repository is for shared work on projects for ECEN5013 
 Embedded Software Essentials
 
+NOTE: For project 2, the normal build system in Kinetis
+Design Studio was used. This makefile was only used to 
+cross compile for the BBB.
 
 
 # Folder Structure
