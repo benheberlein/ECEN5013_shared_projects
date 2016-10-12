@@ -4,9 +4,13 @@
 # Date: 9/14/16
 #
 # Description:
-# This is the Makefile for the project. It holds the build
+# This is the Makefile for project 1. It holds the build
 # configuration across multiple platforms: Ubuntu Linux,
 # Beagle Bone Black, and Freedom Freescale KL25Z.
+#
+# NOTE: For project 2, the normal build system in Kinetis
+# Design Studio was used. This makefile was only used to 
+# cross compile for the BBB.
 #
 # Author: Ben Heberlein
 #
@@ -16,7 +20,7 @@
 ##########################################################
 # Project version
 # Options are 1, 2, 3, 4
-PROJECT := 1
+PROJECT := 2
 
 # Host architecture
 # Options are HOST, BBB or FRDM
@@ -28,7 +32,7 @@ HOST_ADDR := root@192.168.7.2:
 
 # Debug options
 # Options are TRUE or FALSE
-DEBUG := FALSE
+DEBUG := TRUE
 
 # Compiler warnings
 # Options are TRUE or FALSE
@@ -42,7 +46,7 @@ FLAGS := NONE
 ##########################################################
 # Construct compiler flags
 CFLAGS = -std=c99 -I$(INC_DIR)
-ifeq ($(DEBUG), TRUE) 
+ifeq ($(DEBUG), TRUE)
  CFLAGS += -g -O0
 endif
 ifneq ($(FLAGS), NONE)
@@ -162,7 +166,7 @@ all: build
 $(BIN_DIR)/$(OUTPUT_NAME): $(addprefix $(BUILD_DIR)/, $(OBJS))
 	@$(MKDIR_P) $(BIN_DIR)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
-	$(SIZE) $@ 
+	$(SIZE) $@
 
 # Invoke dump on project output
 .PHONY: dump

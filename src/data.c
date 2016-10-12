@@ -17,8 +17,8 @@
 #include <stdio.h>
 
 /****************************************************************************
-*my_itoa  : int8_t *my_itoa(int8_t *str, int32_t data, int32_t base);
-*   returns  : array pointer of trasnformed data
+*my_itoa     : int my_itoa(int8_t *str, int32_t data, int32_t base);
+*   returns  : length of ASCII array
 *   str      : array pointer for transformed data
 *   data     : number to be transformed
 *   base     : base number value
@@ -27,39 +27,37 @@
 *Description : takes a interger and converts it into ASCII string
 *Notes       : Only works with base 10 or lower
 ****************************************************************************/
-int8_t *my_itoa(int8_t *str, int32_t data, int32_t base) {
-    //array for storing ascii string
-    static int8_t string[256];
+int my_itoa(uint8_t *str, int32_t data, int32_t base) {
+
     //functional iterator variable
     int i = 0;
     //sign flag
     int8_t sign = 1;
     //check for negative number
     if (data < 0){
-      printf("-");
       sign = -1;
       data = data *-1;
     }
     //add digits to ASCII string
     while(data != 0){
-        string[i] = data % base + '0';
-        if (string[i] >= 10 + '0') {
-            string[i] = string[i] + 7;
+        str[i] = (uint8_t) (data % base + '0');
+        if (str[i] >= 10 + '0') {
+             str[i] = str[i] + 7;
         }
         i++;
         data = data/base;
     }
     //add the negative sign to array
     if(sign < 1){
-      string[i] = '-';
+      str[i] = '-';
       i++;
     }
     //add null terminator
-    string[i] = '\0';
+    str[i] = '\0';
     //reverse the string
-    my_reverse(string, i);
-    str = string;
-    return string;
+
+    my_reverse(str, i);
+    return i;
 }
 
 /****************************************************************************
@@ -79,7 +77,6 @@ int32_t my_atoi(int8_t *str) {
     if(*str == '-'){
       sign = -1;
       str++;
-      printf("negative\n");
     }
     //convert ASCII to value
     while(*str != '\0'){
@@ -151,4 +148,47 @@ uint32_t big_to_little(uint32_t data) {
 uint32_t little_to_big(uint32_t data) {
     //endianness change is the same in either direction
     return big_to_little( data);
+}
+
+/****************************************************************************
+*ftoa         : void ftoa(float value, uint8_t *ascii);
+*   returns   : void
+*   value     : float value to be transformed to ascii
+*   ascii     : array with ascii values of value
+*Created by   : Jeff Venicx
+*Date         : 10-5-16
+*Description  : convert a float into a array of ascii
+****************************************************************************/
+
+void my_ftoa(float value, uint8_t *ascii){
+  //extract interger
+  int interger = (int)value;
+  //printf("interger part: %d\n", interger);
+
+  //extract float portion
+  int multiplier = 1;
+  if(interger < 0){
+    multiplier = -1;
+  }
+  float fraction = value - (float)interger;
+  fraction = fraction * 1000 * multiplier;
+
+  my_itoa(ascii, interger, 10);
+  int i = strlen(ascii);
+
+  ascii[i] = 46;
+  i++;
+  fraction = (int)fraction;
+  my_itoa(&ascii[i],fraction, 10);
+
+}
+
+void concat_strings(uint8_t *out_buf, uint8_t *a, uint8_t *b, uint8_t a_size, uint8_t b_size) {
+	uint8_t i = 0;
+	for (i = 0; i < a_size; i++) {
+		*(out_buf+i) = *(a+i);
+	}
+	for (i = 0; i < b_size; i++) {
+		*(out_buf+a_size+i) = *(b+i);
+	}
 }

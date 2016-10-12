@@ -54,7 +54,7 @@ static char *test_my_memmove() {
         buffer[i+first_length] = 0;
     }
 
-/*
+ /*
     // Move overlapping
     error = my_memmove(buffer, buffer+second_length, first_length);
     if (error != -1) {
@@ -69,7 +69,7 @@ static char *test_my_memmove() {
             mu_assert(error3, buffer[i] == i);
         }
     }
-*/
+ */
     // Length 0 should preserve values
     error = my_memmove(buffer, buffer+first_length, 0);
     mu_assert(error5, error == 0);
