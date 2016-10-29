@@ -21,6 +21,7 @@
 #include "profiler.h"
 #include "circbuf.h"
 #include "data.h"
+#include "dma.h"
 
 #define ECHO_BUF_CAP 128
 
@@ -156,7 +157,9 @@ int main(int argc, const char* argv[]) {
 			case ('G'):
 				toggle_led(GREEN);
 				break;
-
+			case ('n'):
+				led_routine();
+				break;
 			default:
 				__NOP;
 
@@ -166,6 +169,29 @@ int main(int argc, const char* argv[]) {
     	tx_buf();
     }
 	#endif
+
+	#endif
+
+	#ifdef PROJECT_3
+		#ifdef FRDM
+    	init_uart();
+    	dma_init();
+		#endif
+
+    	uint8_t buf1[100];
+    	uint8_t buf2[100];
+    	for (int i=0; i<100; i++) {
+    		buf1[i] = i + 0x90;
+    		buf2[i] = 0xA5;
+    	}
+
+    	dma_start(buf1, buf2, 4, 48);
+    	dma_start(buf2+48, buf1+48, 1, 52);
+
+    	while(1) {
+    		// Clear UART buffer continuously
+    		tx_buf();
+    	}
 
 	#endif
 

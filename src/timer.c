@@ -86,3 +86,58 @@ uint8_t toggle_led(led_t led) {
 	}
 	change_duty(0);
 }
+
+uint8_t led_routine() {
+	set_duty(0);
+	while(1){
+		RED_EN = 0;
+		GRN_EN = 0;
+		BLUE_EN = 0;
+		change_duty(0);
+		RED_EN = 1;
+		for (int i = 0; i < 20; i++) {
+			for (int j = 0; j < 100000; j++) {
+				__NOP;
+			}
+			change_duty(5);
+		}
+		GRN_EN = 1;
+		for (int i = 0; i < 20; i++) {
+			for (int j = 0; j < 100000; j++) {
+				__NOP;
+			}
+			change_duty(-5);
+		}
+		BLUE_EN = 1;
+		for (int i = 0; i < 20; i++) {
+			for (int j = 0; j < 100000; j++) {
+				__NOP;
+			}
+			change_duty(5);
+		}
+		RED_EN = 0;
+		for (int i = 0; i < 20; i++) {
+			for (int j = 0; j < 100000; j++) {
+				__NOP;
+			}
+			change_duty(-5);
+		}
+		RED_EN = 1;
+		GRN_EN = 0;
+		for (int i = 0; i < 20; i++) {
+			for (int j = 0; j < 100000; j++) {
+					__NOP;
+				}
+				change_duty(5);
+		}
+		RED_EN = 0;
+		GRN_EN = 0;
+		BLUE_EN = 0;
+		for (int i = 0; i < 20; i++) {
+			for (int j = 0; j < 100000; j++) {
+				__NOP;
+			}
+			change_duty(-5);
+		}
+	}
+}
