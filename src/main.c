@@ -22,6 +22,7 @@
 #include "circbuf.h"
 #include "data.h"
 #include "dma.h"
+#include "memory.h"
 
 #define ECHO_BUF_CAP 128
 
@@ -180,13 +181,17 @@ int main(int argc, const char* argv[]) {
 
     	uint8_t buf1[100];
     	uint8_t buf2[100];
+    	uint8_t buf3[20];
+    	uint8_t *ptr = buf3;
     	for (int i=0; i<100; i++) {
     		buf1[i] = i + 0x90;
     		buf2[i] = 0xA5;
+    		buf3[i] = i;
     	}
 
-    	dma_start(buf1, buf2, 4, 48);
-    	dma_start(buf2+48, buf1+48, 1, 52);
+    	//dma_memmove(ptr+7, ptr+3, 10);
+
+    	dma_memzero(ptr+1, 15);
 
     	while(1) {
     		// Clear UART buffer continuously

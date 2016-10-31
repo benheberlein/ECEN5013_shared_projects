@@ -15,6 +15,32 @@
 
 #include <stdint.h>
 
+#ifdef FRDM
+/****************************************************************************
+*dma_memmove  : int8_t dma_memmove(uint8_t *src, uint8_t *dst, uint32_t length);
+*   returns   : 1 for succes -1 failure
+*   src       : source pointer for move
+*   dst       : destination pointer for move
+*   length    : length of data to be moved
+*Created by   : Ben Heberlein
+*Date         : 10/29/16
+*Description  : move memory from one location to another with DMA
+****************************************************************************/
+int8_t dma_memmove(uint8_t *src, uint8_t *dst, uint32_t length);
+
+/****************************************************************************
+*dma_memzero : int8_t dma_memzero(uint8_t *src, uint32_t length);
+*   returns  : 1 for succes -1 failure
+*   src      : start point of func
+*   length   : length of data to be used
+*Created by  : Ben Heberlein
+*Date        : 10-29-16
+*Description : place zeros in memory starting at source for length
+****************************************************************************/
+int8_t dma_memzero(uint8_t *src, uint32_t length);
+
+#endif
+
 /****************************************************************************
 *my_memmove  : int8_t my_memmove(uint8_t *src, uint8_t *dst, uint32_t length);
 *   returns  : 1 for succes -1 failure
