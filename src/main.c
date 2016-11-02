@@ -24,6 +24,8 @@
 #include "dma.h"
 #include "memory.h"
 
+#include "SPI.h"
+
 #define ECHO_BUF_CAP 128
 
 #ifdef PROJECT_2
@@ -64,6 +66,21 @@ int8_t logging_demo() {
 #endif
 
 int main(int argc, const char* argv[]) {
+
+	#ifdef TEST
+		spi_init();
+
+		for(int i=1; i<20; i++){
+			spi_send('a');
+			for(int j=1; j<100000; j++){
+				__NOP;
+			}
+			spi_send('\n');
+		}
+
+
+	#endif
+
 
     #ifdef PROJECT_1
     project_1_report();

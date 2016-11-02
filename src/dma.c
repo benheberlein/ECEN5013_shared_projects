@@ -45,6 +45,10 @@ int8_t dma_start(uint8_t *src, uint8_t *dst, uint32_t len) {
 	while(!ready_flag){
 		__NOP;
 	}
+	
+	// Set transfer flag
+	ready_flag = 0;
+	
 	DMA_SAR0 = (uint32_t) src;
 	DMA_DAR0 = (uint32_t) dst;
 	DMA_DSR_BCR0 &= ~DMA_DSR_BCR_BCR_MASK;
@@ -69,8 +73,6 @@ int8_t dma_start(uint8_t *src, uint8_t *dst, uint32_t len) {
 	DMA_DCR0 |= DMA_DCR_SINC_MASK;
 	DMA_DCR0 |= DMA_DCR_DINC_MASK;
 
-	// Set transfer flag
-	ready_flag = 0;
 
 	DMA_DCR0 |= DMA_DCR_START_MASK;
 
@@ -92,6 +94,10 @@ int8_t dma_zero(uint8_t *dst, uint8_t chunk_size, uint32_t len) {
 	while(!ready_flag){
 		__NOP;
 	}
+	
+	// Set transfer flag
+	ready_flag = 0;
+
 
 	// Can't use auto align for zero
 	DMA_DCR0 &= ~DMA_DCR_AA_MASK;
@@ -122,8 +128,6 @@ int8_t dma_zero(uint8_t *dst, uint8_t chunk_size, uint32_t len) {
 	DMA_DCR0 &= ~DMA_DCR_SINC_MASK;
 	DMA_DCR0 |= DMA_DCR_DINC_MASK;
 
-	// Set transfer flag
-	ready_flag = 0;
 
 	DMA_DCR0 |= DMA_DCR_START_MASK;
 
