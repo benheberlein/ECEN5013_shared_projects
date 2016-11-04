@@ -177,8 +177,9 @@ int main(int argc, const char* argv[]) {
 		#ifdef FRDM
     	init_uart();
     	dma_init();
+    	init_timer();
 		#endif
-
+#if 0
     	uint8_t buf1[100];
     	uint8_t buf2[100];
     	uint8_t buf3[20];
@@ -192,10 +193,10 @@ int main(int argc, const char* argv[]) {
     	//dma_memmove(ptr+7, ptr+3, 10);
 
     	dma_memzero(ptr+1, 15);
+#endif
 
     	while(1) {
-    		// Clear UART buffer continuously
-    		tx_buf();
+    		cmd_rx();
     	}
 
 	#endif
