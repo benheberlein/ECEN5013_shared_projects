@@ -9,6 +9,18 @@
 *
 ***********************************************************/
 
+#include <stdint.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <getopt.h>
+#include <fcntl.h>
+#include <sys/ioctl.h>
+#include <linux/types.h>
+#include <linux/spi/spidev.h>
+
+
+
 #ifdef FRDM
 #include "MKL25Z4.h"
 #include "uart.h"
@@ -21,8 +33,23 @@
 #include "profiler.h"
 #include "circbuf.h"
 #include "data.h"
+#include "dma.h"
+#include "memory.h"
+
+
+
+
+#ifdef BBB
+#include <linux/types.h>
+#include <linux/spi/spidev.h>
+#endif
+
+#include "SPI.h"
+#include "nRF24L01.h"
 
 #define ECHO_BUF_CAP 128
+
+#define TEST
 
 #ifdef PROJECT_2
 int8_t logging_demo() {
@@ -62,6 +89,18 @@ int8_t logging_demo() {
 #endif
 
 int main(int argc, const char* argv[]) {
+
+
+	  #ifdef PROJECT_4
+    printf("helloworld\n");
+    
+
+    
+    
+    printf("end world\n");
+
+		#endif
+
 
     #ifdef PROJECT_1
     project_1_report();
@@ -156,7 +195,9 @@ int main(int argc, const char* argv[]) {
 			case ('G'):
 				toggle_led(GREEN);
 				break;
-
+			case ('n'):
+				led_routine();
+				break;
 			default:
 				__NOP;
 
@@ -165,7 +206,35 @@ int main(int argc, const char* argv[]) {
 
     	tx_buf();
     }
+#endif
+
 	#endif
+
+	#ifdef PROJECT_3
+		#ifdef FRDM
+    	init_uart();
+    	dma_init();
+    	init_timer();
+		#endif
+#if 0
+    	uint8_t buf1[100];
+    	uint8_t buf2[100];
+    	uint8_t buf3[20];
+    	uint8_t *ptr = buf3;
+    	for (int i=0; i<100; i++) {
+    		buf1[i] = i + 0x90;
+    		buf2[i] = 0xA5;
+    		buf3[i] = i;
+    	}
+
+    	//dma_memmove(ptr+7, ptr+3, 10);
+
+    	dma_memzero(ptr+1, 15);
+#endif
+
+    	while(1) {
+    		cmd_rx();
+    	}
 
 	#endif
 

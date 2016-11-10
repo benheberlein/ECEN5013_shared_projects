@@ -20,7 +20,7 @@
 #include "log.h"
 #include "data.h"
 #include "circbuf.h"
-#include<time.h>
+#include <time.h>
 
 #include "stdlib.h"
 #include "string.h"
@@ -34,8 +34,7 @@
 //decimal translation of PRESCALE
 #define PRESCALE_MULTI 128
 
-void delay(int milliseconds)
-{
+void delay(int milliseconds) {
     long pause;
     clock_t now,then;
 
@@ -65,8 +64,13 @@ void profile_memory(uint32_t length) {
 		TPM1_CNT = 0;
 		my_memmove(src, dst, length);
 		cycles_128 = (uint16_t)TPM1_CNT;
-		test = (cycles_128*PRESCALE_MULTI);
-		test = test/48;
+		// Between this multiplication and the division of SystemCoreClock
+		// test should be a value in uSeconds
+		test = (cycles_128*PRESCALE_MULTI)*1000;
+		//test = test/48;
+		// Use SystemCoreClock for accuracy
+		test = test/(SystemCoreClock/1000);
+
 		message_length = my_itoa(time_buffer, test, 10);
 	#else
 			gettimeofday(&start, NULL);
@@ -88,8 +92,13 @@ void profile_memory(uint32_t length) {
 		memmove(dst, src, length);
 
 		cycles_128 = (uint16_t)TPM1_CNT;
-		test = (cycles_128*PRESCALE_MULTI);
-		test = test/48;
+		// Between this multiplication and the division of SystemCoreClock
+		// test should be a value in uSeconds
+		test = (cycles_128*PRESCALE_MULTI)*1000;
+		//test = test/48;
+		// Use SystemCoreClock for accuracy
+		test = test/(SystemCoreClock/1000);
+
 		message_length = my_itoa(time_buffer, test, 10);
 	#else
 
@@ -112,8 +121,13 @@ void profile_memory(uint32_t length) {
 		my_memzero(src, length);
 
 		cycles_128 = (uint16_t)TPM1_CNT;
-		test = (cycles_128*PRESCALE_MULTI);
-		test = test/48;
+		// Between this multiplication and the division of SystemCoreClock
+		// test should be a value in uSeconds
+		test = (cycles_128*PRESCALE_MULTI)*1000;
+		//test = test/48;
+		// Use SystemCoreClock for accuracy
+		test = test/(SystemCoreClock/1000);
+
 		message_length = my_itoa(time_buffer, test, 10);
 	#else
 
@@ -136,8 +150,13 @@ void profile_memory(uint32_t length) {
 		memset(src, 0, length);
 
 		cycles_128 = (uint16_t)TPM1_CNT;
-		test = (cycles_128*PRESCALE_MULTI);
-		test = test/48;
+		// Between this multiplication and the division of SystemCoreClock
+		// test should be a value in uSeconds
+		test = (cycles_128*PRESCALE_MULTI)*1000;
+		//test = test/48;
+		// Use SystemCoreClock for accuracy
+		test = test/(SystemCoreClock/1000);
+
 		message_length = my_itoa(time_buffer, test, 10);
 	#else
 
@@ -160,8 +179,13 @@ void profile_memory(uint32_t length) {
 		my_reverse(src, length);
 
 		cycles_128 = (uint16_t)TPM1_CNT;
-		test = (cycles_128*PRESCALE_MULTI);
-		test = test/48;
+		// Between this multiplication and the division of SystemCoreClock
+		// test should be a value in uSeconds
+		test = (cycles_128*PRESCALE_MULTI)*1000;
+		//test = test/48;
+		// Use SystemCoreClock for accuracy
+		test = test/(SystemCoreClock/1000);
+
 		message_length = my_itoa(time_buffer, test, 10);
 	#else
 
@@ -204,8 +228,13 @@ void profile_data () {
 		my_itoa(buffer, interger, 10);
 
 		cycles_128 = (uint16_t)TPM1_CNT;
-		test = (cycles_128*PRESCALE_MULTI);
-		test = test/48;
+		// Between this multiplication and the division of SystemCoreClock
+		// test should be a value in uSeconds
+		test = (cycles_128*PRESCALE_MULTI)*1000;
+		//test = test/48;
+		// Use SystemCoreClock for accuracy
+		test = test/(SystemCoreClock/1000);
+
 		message_length = my_itoa(time_buffer, test, 10);
 	#else
 		gettimeofday(&start, NULL);
@@ -224,7 +253,7 @@ void profile_data () {
 	#ifdef BBB
 		gettimeofday(&start, NULL);
 
-		itoa(interger, buffer, 10);
+		//itoa(interger, buffer, 10);
 
 		gettimeofday(&stop, NULL);
 		profile_convert_time(&result, &stop, &start);
@@ -242,8 +271,13 @@ void profile_data () {
 		my_ftoa(flt, buffer);
 
 		cycles_128 = (uint16_t)TPM1_CNT;
-		test = (cycles_128*PRESCALE_MULTI);
-		test = test/48;
+		// Between this multiplication and the division of SystemCoreClock
+		// test should be a value in uSeconds
+		test = (cycles_128*PRESCALE_MULTI)*1000;
+		//test = test/48;
+		// Use SystemCoreClock for accuracy
+		test = test/(SystemCoreClock/1000);
+
 		message_length = my_itoa(time_buffer, test, 10);
 	#else
 		gettimeofday(&start, NULL);
@@ -279,8 +313,13 @@ void profile_data () {
 		interger = my_atoi(buffer);
 
 		cycles_128 = (uint16_t)TPM1_CNT;
-		test = (cycles_128*PRESCALE_MULTI);
-		test = test/48;
+		// Between this multiplication and the division of SystemCoreClock
+		// test should be a value in uSeconds
+		test = (cycles_128*PRESCALE_MULTI)*1000;
+		//test = test/48;
+		// Use SystemCoreClock for accuracy
+		test = test/(SystemCoreClock/1000);
+
 		message_length = my_itoa(time_buffer, test, 10);
 	#else
 		gettimeofday(&start, NULL);
@@ -328,8 +367,13 @@ void profile_malloc(uint32_t num_bytes) {
 	ptr = (uint8_t *) malloc(num_bytes);
 
 	cycles_128 = (uint16_t)TPM1_CNT;
-	test = (cycles_128*PRESCALE_MULTI);
-	test = test/48;
+	// Between this multiplication and the division of SystemCoreClock
+	// test should be a value in uSeconds
+	test = (cycles_128*PRESCALE_MULTI)*1000;
+	//test = test/48;
+	// Use SystemCoreClock for accuracy
+	test = test/(SystemCoreClock/1000);
+
 	message_length = my_itoa(time_buffer, test, 10);
 	free(ptr);
 #else
@@ -370,8 +414,13 @@ void profile_circbuf() {
 	circbuf_add_item(32, cb);
 
 	cycles_128 = (uint16_t)TPM1_CNT;
-	test = (cycles_128*PRESCALE_MULTI);
-	test = test/48;
+	// Between this multiplication and the division of SystemCoreClock
+	// test should be a value in uSeconds
+	test = (cycles_128*PRESCALE_MULTI)*1000;
+	//test = test/48;
+	// Use SystemCoreClock for accuracy
+	test = test/(SystemCoreClock/1000);
+
 	message_length = my_itoa(time_buffer, test, 10);
 #else
 	gettimeofday(&start, NULL);
@@ -392,8 +441,13 @@ void profile_circbuf() {
 	circbuf_remove_item(cb);
 
 	cycles_128 = (uint16_t)TPM1_CNT;
-	test = (cycles_128*PRESCALE_MULTI);
-	test = test/48;
+	// Between this multiplication and the division of SystemCoreClock
+	// test should be a value in uSeconds
+	test = (cycles_128*PRESCALE_MULTI)*1000;
+	//test = test/48;
+	// Use SystemCoreClock for accuracy
+	test = test/(SystemCoreClock/1000);
+
 	message_length = my_itoa(time_buffer, test, 10);
 #else
 	gettimeofday(&start, NULL);
@@ -424,8 +478,13 @@ void profile_log() {
 	Log0("test log time", 13);
 
 	cycles_128 = (uint16_t)TPM1_CNT;
-	test = (cycles_128*PRESCALE_MULTI);
-	test = test/48;
+	// Between this multiplication and the division of SystemCoreClock
+	// test should be a value in uSeconds
+	test = (cycles_128*PRESCALE_MULTI)*1000;
+	//test = test/48;
+	// Use SystemCoreClock for accuracy
+	test = test/(SystemCoreClock/1000);
+
 	message_length = my_itoa(time_buffer, test, 10);
 
 	Log3("Log0 time usec:", 15);
@@ -443,6 +502,8 @@ void profile_init(){
 
 	//set mod number for max
 	TPM_MOD_REG(TPM1) = 65535;
+
+	uint32_t ssc = SystemCoreClock;
 #endif
 }
 
@@ -473,7 +534,7 @@ void profile_all() {
 	profile_init();
 
 	Log0("profiler start", 14);
-/*
+
 	Log0("10 bytes", 8);
 	profile_memory(10);
 
@@ -487,21 +548,21 @@ void profile_all() {
 	profile_memory(5000);
 
 	profile_data();
-*/
+/*
 	Log0("malloc 10 bytes", 15);
 	profile_malloc(10);
 
 	Log0("malloc 100 bytes", 16);
-	profile_malloc(10);
+	profile_malloc(100);
 
 	Log0("malloc 500 bytes", 16);
-	profile_malloc(10);
+	profile_malloc(500);
 
 	Log0("malloc 1000 bytes", 17);
-	profile_malloc(10);
+	profile_malloc(1000);
 
 	profile_circbuf();
 
 	profile_log();
-
+*/
 }
