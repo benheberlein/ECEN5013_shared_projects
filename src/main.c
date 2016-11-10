@@ -24,6 +24,9 @@
 #include "dma.h"
 #include "memory.h"
 
+#include "SPI.h"
+#include "nRF24L01.h"
+
 #define ECHO_BUF_CAP 128
 
 #ifdef PROJECT_2
@@ -64,6 +67,47 @@ int8_t logging_demo() {
 #endif
 
 int main(int argc, const char* argv[]) {
+
+	#ifdef TEST
+		spi_init();
+
+		uint8_t receive[8];
+
+		uint8_t tx_address_receive[5];
+		uint8_t tx_address_receive2[5];
+
+		uint8_t tx_address_send[5];
+
+		tx_address_send[0] = 0xFF;
+		tx_address_send[1] = 0xEE;
+		tx_address_send[2] = 0xDD;
+		tx_address_send[3] = 0xCC;
+		tx_address_send[4] = 0xBB;
+
+
+		for(int j = 0; j <= 10; j++){
+			__NOP;
+		}
+
+		  receive[0] = nrf_get_status();
+
+		  receive[1] = nrf_get_config();
+
+		  receive[2] = nrf_get_fifo_status();
+
+		  receive[3] = nrf_get_config();
+
+
+
+
+
+
+		  while(1){
+			  receive[0] = nrf_get_status();
+		  }
+
+		#endif
+
 
     #ifdef PROJECT_1
     project_1_report();
@@ -169,7 +213,7 @@ int main(int argc, const char* argv[]) {
 
     	tx_buf();
     }
-	#endif
+#endif
 
 	#endif
 
