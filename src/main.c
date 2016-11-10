@@ -9,6 +9,18 @@
 *
 ***********************************************************/
 
+#include <stdint.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <getopt.h>
+#include <fcntl.h>
+#include <sys/ioctl.h>
+#include <linux/types.h>
+#include <linux/spi/spidev.h>
+
+
+
 #ifdef FRDM
 #include "MKL25Z4.h"
 #include "uart.h"
@@ -24,10 +36,19 @@
 #include "dma.h"
 #include "memory.h"
 
+
+
+
+
+#include <linux/types.h>
+#include <linux/spi/spidev.h>
+
 #include "SPI.h"
 #include "nRF24L01.h"
 
 #define ECHO_BUF_CAP 128
+
+#define TEST
 
 #ifdef PROJECT_2
 int8_t logging_demo() {
@@ -68,44 +89,13 @@ int8_t logging_demo() {
 
 int main(int argc, const char* argv[]) {
 
-	#ifdef TEST
-		spi_init();
+	  #ifdef PROJECT_4
+    printf("helloworld\n");
+    
 
-		uint8_t receive[8];
-
-		uint8_t tx_address_receive[5];
-		uint8_t tx_address_receive2[5];
-
-		uint8_t tx_address_send[5];
-
-		tx_address_send[0] = 0xFF;
-		tx_address_send[1] = 0xEE;
-		tx_address_send[2] = 0xDD;
-		tx_address_send[3] = 0xCC;
-		tx_address_send[4] = 0xBB;
-
-
-		for(int j = 0; j <= 10; j++){
-			__NOP;
-		}
-
-		  receive[0] = nrf_get_status();
-
-		  receive[1] = nrf_get_config();
-
-		  receive[2] = nrf_get_fifo_status();
-
-		  receive[3] = nrf_get_config();
-
-
-
-
-
-
-		  while(1){
-			  receive[0] = nrf_get_status();
-		  }
-
+    
+    
+    printf("end world\n");
 		#endif
 
 

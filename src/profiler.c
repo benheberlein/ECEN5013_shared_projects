@@ -253,7 +253,7 @@ void profile_data () {
 	#ifdef BBB
 		gettimeofday(&start, NULL);
 
-		itoa(interger, buffer, 10);
+		//itoa(interger, buffer, 10);
 
 		gettimeofday(&stop, NULL);
 		profile_convert_time(&result, &stop, &start);

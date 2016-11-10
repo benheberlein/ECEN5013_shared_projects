@@ -9,13 +9,36 @@
 * Author: Jeff Venicx
 *
 ***********************************************************/
-#include "MKL25Z4.h"
+
 #include <stdint.h>
 #include <stdlib.h>
+#include "log.h"
+
+#ifdef FRDM
+#include "MKL25Z4.h"
+#endif 
+
+#ifdef BBB
+#include <unistd.h>
+#include <stdio.h>
+#include <getopt.h>
+#include <fcntl.h>
+#include <sys/ioctl.h>
+
+#include <linux/spi/spidev.h>
 
 
-void spi_init(){
 
+unsigned char value, null=0x00;         //sending only a single char
+uint8_t bits = 8, mode = 1;             //8-bits per word, SPI mode 2 for CPOL!!!
+uint32_t speed = 1000000;               //Speed is 1 MHz
+
+#endif
+
+
+int spi_init(){
+  
+  #ifdef FRDM
 	//turn on clock to D module
 	SIM_SCGC5 |= SIM_SCGC5_PORTC_MASK;
 
@@ -45,6 +68,54 @@ void spi_init(){
 
 	//set SS pin to high
 	PTC_BASE_PTR->PSOR |= 1<<8;
+ 
+  return 0;
+  #endif
+  
+  #ifdef BBB
+  static const char *device = "/dev/spidev1.0";
+	int fd;
+    
+     //mode |= SPI_CPOL;
+  
+  if ((fd = open(device, O_RDWR))<0){
+      Log0("SPI Error: Can't open device.",29);
+      return -1;
+      }
+      
+  if (ioctl(fd, SPI_IOC_WR_MODE, &mode)==-1){
+      Log0("SPI: Can't set SPI mode.", 23);
+      return -1;
+      }
+      
+  if (ioctl(fd, SPI_IOC_RD_MODE, &mode)==-1){
+      Log0("SPI: Can't get SPI mode.", 23);
+      return -1;
+   }
+   if (ioctl(fd, SPI_IOC_WR_BITS_PER_WORD, &bits)==-1){
+      Log0("SPI: Can't set bits per word.",29);
+      return -1;
+   }
+   
+   if (ioctl(fd, SPI_IOC_RD_BITS_PER_WORD, &bits)==-1){
+      Log0("SPI: Can't get bits per word.",29);
+      return -1;
+   }
+   
+   if (ioctl(fd, SPI_IOC_WR_MAX_SPEED_HZ, &speed)==-1){
+      Log0("SPI: Can't set max speed HZ",27);
+      return -1;
+   }
+   
+   if (ioctl(fd, SPI_IOC_RD_MAX_SPEED_HZ, &speed)==-1){
+      Log0("SPI: Can't get max speed HZ.",28);
+      return -1;
+   }
+  
+  return fd;
+  #endif
+  
+  
 }
 
 
@@ -52,13 +123,7 @@ void spi_init(){
 
 
 void spi_send_uint8(uint8_t data){
-	//wait for tx buffer to clear
-	while(!(SPI0_S & SPI_S_SPTEF_MASK))
-	{
-		__NOP;
-	}
-	//send data
-	SPI0_D = data;
+	
 }
 
 
