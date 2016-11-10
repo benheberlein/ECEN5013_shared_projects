@@ -20,11 +20,11 @@
 ##########################################################
 # Project version
 # Options are 1, 2, 3, 4
-PROJECT := 2
+PROJECT := 4
 
 # Host architecture
 # Options are HOST, BBB or FRDM
-PLATFORM := HOST
+PLATFORM := BBB
 
 # File upload address
 # Options are any valid host (with directory)
@@ -74,7 +74,7 @@ ifeq ($(PLATFORM), HOST)
  CC   := gcc
  SIZE := size
 else ifeq ($(PLATFORM), BBB)
- ifeq ($(UNAME_N), beaglebone)
+ ifeq ($(shell uname -n), beaglebone)
   CC   := gcc
   SIZE := size
  else

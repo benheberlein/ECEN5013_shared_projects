@@ -14,7 +14,7 @@
 
 #include <stdint.h>
 
-void spi_init();
+int spi_init();
 
 void spi_send(char spiMsg);
 
